@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Creating a Group Category -->
+        <!--<record id="category_name" model="ir.module.category">
+            <field name="name">Name</field>
+            <field name="sequence">1</field>
+        </record>--><!--en este caso existe, es inventario-->
+        <!-- Adding a Group to the Group Category -->
+        <record id="group_stock_despacho" model="res.groups">
+            <field name="name">Despachos</field>
+            <field name="category_id" ref="base.module_category_operations_inventory"/><!--inventario-->
+            <!-- Adding Rights of existing Groups (Heredado) -->
+            <!--<field name="implied_ids"
+            eval="[(4, ref('base.group_system')), (4,ref('base.group_sale_manager'))]"/>-->
+        </record>
+    </data>
+</odoo>
+<!--
+<menuitem name="Name" id="id_name" parent="module.menu_id" action="module.action_id"
+groups="base.group_system"/>
+
+seguridad / ir.model.acc
+
+
+access_anything,classname,model_classname,group_id,1,1,1,1
+access_ir_property1,ir_property,base.model_ir_property,your_new_group_id,1,1,1,1
+-->

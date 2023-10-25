@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+termino_pago_sunat1,termino_pago_sunat1,facturacion_electronica.model_termino_pago_sunat,,1,1,1,1

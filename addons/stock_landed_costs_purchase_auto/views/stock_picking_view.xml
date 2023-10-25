@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fecha_prevista_venta" model="ir.ui.view">
+            <field name="name">Fecha Venta</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='priority']" position="replace">
+                    <field name="land_cost"/>
+                    <field name="numero_embarque"/>
+                </xpath>
+                <!--<div class="oe_button_box" name="button_box">
+                    <button type="object" name="crear_factura" class="oe_stat_button" icon="fa-pencil-square-o" string="Factura" >
+                    </button>
+                </div>-->
+            </field>
+        </record>
+    </data>
+</openerp>

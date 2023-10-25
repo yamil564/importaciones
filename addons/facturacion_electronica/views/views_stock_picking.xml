@@ -1,0 +1,96 @@
+<odoo>
+    <data>
+        <!-- Formulario INVOICE falta-->
+        <record model="ir.ui.view" id="facturacion_electronica.button_stock_picking">
+            <field name="name">Boton para generar Guia</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_confirm']" position="after">
+                    <button name="generarGuiaRemision" style="background-color: #60607485;pointer-events: none"
+                        string="Generar Guia de Remision"
+                        type="object"
+                        groups="base.group_no_one" />
+                    <button name="firmar" style="background-color: #60607485;pointer-events: none"
+                        string="Firmar" 
+                        type="object"
+                        groups="base.group_no_one"/>
+                    <button name="enviar" style="background-color: #60607485;pointer-events: none"
+                        string="Enviar SUNAT"
+                        type="object"
+                        />
+                    <button name="%(report_number_to_letter.action_report_guia_remi)d" string="IMPRIMIR" type="action"/>
+                </xpath>
+                <xpath expr="//button[@name='do_print_picking']" position="replace">
+                </xpath>
+                <!--<xpath expr="//button[@name='131']" position="replace">
+                </xpath>-->
+                <xpath expr="//button[@name='button_scrap']" position="replace">
+                    <button name="button_scrap" type="object" string="DESECHO" attrs="{'invisible': ['|', ('state', 'in', ('draft', 'cancel')), '&amp;', ('picking_type_code', '=', 'incoming'), ('state', '!=', 'done')]}" />
+                </xpath>
+                <!--<xpath expr="//button[@name='139']" position="replace">
+                    <button name="139" string="Return" states="done" type="action" groups="base.group_user"/>
+                </xpath>-->
+                <xpath expr="//button[@name='action_cancel']" position="replace">
+                    <button name="action_cancel" style="background-color: #60607485;pointer-events: none" states="assigned,confirmed,partially_available,draft,waiting" string="CANCELAR" groups="base.group_user" type="object"/>
+                </xpath>
+                <!--<xpath expr="//button[@name='do_new_transfer']" position="replace">
+                    <button name="do_new_transfer" states="draft,assigned" string="VALIDAR" groups="stock.group_stock_user" type="object" class="oe_highlight"/>
+                </xpath>-->
+            </field>
+        </record>
+
+        <!-- FORMULARIO INVOICE -->
+        <record model="ir.ui.view" id="facturacion_electronica.stock_picking_form">
+            <field name="name">Documento XML</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="activity_state"/>
+                    <field name="val_guia"/>
+                    <field name="nro_guia" string="Nro. Guia" readonly="1"/>
+                </xpath>
+                <xpath expr="//page[@name='extra']" position="after">
+                    <page string="Guia Electrónica">
+                        <group>
+                            <group>
+                                <!-- <field name="documentoXMLcliente" filename="documentoXMLcliente_fname"></field> -->
+                                <!-- <field name="documentoXMLcliente_fname" invisible="1"></field> -->
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Documento XML" groups="base.group_no_one">
+                        <group>
+                            <!-- <field name="documentoXML"/> -->
+                        </group>
+                    </page>
+                    <!--<page string="Documento de Envío">
+                        <group>
+                            <field name="invoice_payment_state"/>
+                            <field name="documentoRespuestaZip"/> 
+                            <field name="documentoRespuesta"/> 
+                            <field name="documentoEnvio"/> 
+                        </group>
+                    </page>-->
+                    <page string="XML ticket" groups="base.group_no_one">
+                        <group>
+                            <!-- <field name="documentoEnvioTicket"></field> -->
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_picking_tree4" model="ir.ui.view">
+            <field name="name">stock_picking_tree4</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="before">
+                    <field name="nro_guia" string="Nro. Guia"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

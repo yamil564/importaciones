@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+        <record id="transport_sale_form_view" model="ir.ui.view">
+            <field name="name">transport sale</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+             <field name="arch" type="xml">
+                <xpath expr="//field[@name='client_order_ref']" position="after">
+                    <field name="transportista"/>
+                </xpath>
+             </field>
+        </record>
+        <record id="transport_pick_form_view" model="ir.ui.view">
+            <field name="name">transport pick</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+             <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                     <field name="transportista"  attrs="{'required': [('picking_type_code', '!=', 'incoming')]}"/>
+                </xpath>
+             </field>
+        </record>
+    </data>
+</odoo>

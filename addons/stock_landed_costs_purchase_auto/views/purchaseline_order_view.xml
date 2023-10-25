@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 Tecnativa - Víctor Martínez
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <!-- con codigo de proveedor -->
+    <record id="purchaseline_order_tree" model="ir.ui.view">
+        <field name="model">purchase.order.line</field>
+        <field name="name">reporte.ordenes.importacion</field>
+        <!--<field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]" />-->
+        <field name="arch" type="xml">
+            <tree string="Purchase Order Lines" ><!--default_order='order_id' colors="red:product_qty-qty_received > 0;" -->
+                <field name="order_id" />
+                <field name="partner_id" string="Proveedor"/>
+                <field name="state" invisible="1"/>
+                <field name="codigo_producto" string="Cod. Proveedor" />
+                <field name="codigo_producto2" invisible="1"/>
+                <field name="product_id" />
+                <field name="date_order"/>
+                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                <field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting"/>
+                <field name="analytic_tag_ids" groups="purchase.group_analytic_accounting" widget="many2many_tags"/>
+                <field name="product_qty"/>
+                <field name="qty_received" />
+                <field name="observacion" />
+                <field name="saldo_pendiente" />
+                <field name="saldo_pendiente2" invisible="1"/>
+                <field name="qty_invoiced" />
+                <field name="product_uom" string="UMp"/>
+                <field name="price_unit"/>
+                <field name="tipo_compra_le"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="report_purchase_order_line_search_view" model="ir.ui.view">
+        <field name="name">purchase.order.line.search</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <search string="Reporte ordenes de importacion">
+                <filter name="group_product_id" string="Producto" icon="terp-partner" context="{'group_by':'product_id'}"/>
+                <filter name="group_codigo_producto" string="Codigo producto" icon="terp-partner" context="{'group_by':'codigo_producto'}"/> 
+                <field name="order_id" />
+                <field name="partner_id" />
+                <field name="codigo_producto" />
+                <field name="product_id" />
+            </search>
+        </field>
+    </record>
+
+    <record id="action_reporte_orden_linea" model="ir.actions.act_window" >
+            <field name="name">Reporte ordenes de importacion</field>
+            <field name="res_model">purchase.order.line</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="purchaseline_order_tree"/>
+            <field name="domain">
+                [('state','in',['purchase','done']),('tipo_compra_le','=','Importacion'),('order_id.tipo_compra_le','=','Importacion')]
+            </field>
+            <field name="search_view_id" ref="report_purchase_order_line_search_view"/>
+        </record>
+
+    <menuitem name="Reporte ordenes de compra"
+                  id="reporte_orden_linea_importacion"
+                  action="action_reporte_orden_linea"
+                  sequence="150"
+                  parent="purchase.menu_procurement_management"/>
+
+
+
+    <!-- con codigo de roatsa -->
+    <record id="purchaseline_order_tree_roatsa" model="ir.ui.view">
+        <field name="model">purchase.order.line</field>
+        <field name="name">Reporte ordenes de importacion  - Roatsa</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]" />
+        <field name="arch" type="xml">
+            <tree string="Purchase Order Lines" default_order='order_id'  ><!--colors="red:product_qty-qty_received > 0;"-->
+                <field name="order_id" />
+                <field name="partner_id" string="Proveedor"/>
+                <field name="state" invisible="1"/>
+                <field name="codigo_producto" string="Cod. Proveedor"/>
+                <field name="codigo_producto2" invisible="1"/>
+                <field name="default_code" string="Cod. Roatsa"/>
+                <field name="product_id" />
+                <field name="date_order"/>
+                <field name="product_qty"/>
+                <field name="qty_received" />
+                <field name="saldo_pendiente" />
+                <field name="saldo_pendiente2" invisible="1"/>
+                <field name="qty_invoiced" />
+                <field name="price_unit"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="report_purchase_order_line_search_view_roatsa" model="ir.ui.view">
+        <field name="name">purchase.order.line.search.roatsa</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <search string="Reporte ordenes de importacion - Roatsa">
+                <filter name="group_product_id" string="Producto" icon="terp-partner" context="{'group_by':'product_id'}"/>
+                <filter name="group_codigo_producto" string="Codigo producto" icon="terp-partner" context="{'group_by':'codigo_producto'}"/> 
+                <field name="order_id" />
+                <field name="partner_id" />
+                <field name="codigo_producto" />
+                <field name="product_id" />
+            </search>
+        </field>
+    </record>
+
+    <record id="action_reporte_orden_linea_roatsa" model="ir.actions.act_window" >
+            <field name="name">Reporte ordenes de importacion - Roatsa</field>
+            <field name="res_model">purchase.order.line</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="purchaseline_order_tree_roatsa"/>
+            <field name="domain">
+                [('state','in',['purchase','done']),('tipo_compra_le','=','Importacion'),('order_id.tipo_compra_le','=','Importacion')]
+            </field>
+            <field name="search_view_id" ref="report_purchase_order_line_search_view_roatsa"/>
+    </record>
+
+    <menuitem name="Reporte ordenes de compra - Roatsa"
+                  id="reporte_orden_linea_importacion_roatsa"
+                  action="action_reporte_orden_linea_roatsa"
+                  sequence="151"
+                  parent="purchase.menu_procurement_management"/>
+
+</odoo>

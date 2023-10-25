@@ -1,0 +1,33 @@
+<odoo>
+
+    <record id="view_order_form_partner_invoice_shipping" model="ir.ui.view">
+        <field name="name">view.order.form.partner.invoice.shipping</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('type','=','contact')]</attribute>
+            </xpath>
+            <!--
+            <xpath expr="//field[@name='partner_invoice_id']" position="attributes">
+                <attribute name="options">{'no_create':True,'no_quick_create':True,'no_create_edit':True,'no_edit':True,'always_reload':True,'no_open':True}</attribute>
+                <attribute name="domain">['|','&amp;','&amp;',('parent_id','=',partner_id),('type','=','invoice'),('parent_id','!=',False),('id','=',partner_id)]</attribute>
+                <attribute name="context">{'default_type':'invoice',
+                            'default_parent_id':partner_id,
+                            'company_type':'company',
+                            'default_country_id':173,
+                            'show_vat_first':True}</attribute>  
+            </xpath>
+            -->
+            <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
+                <attribute name="options">{'no_create':True,'no_quick_create':True,'no_create_edit':True,'no_edit':True,'always_reload':True,'no_open':True}</attribute>
+                <attribute name="domain">['|','&amp;','&amp;',('parent_id','=',partner_id),('type','=',['delivery','other']),('parent_id','!=',False),('id','=',partner_id)]</attribute>
+                <attribute name="context">{'default_type':'delivery',
+                                            'default_parent_id':partner_id,
+                                            'company_type':'company',
+                                            'default_country_id':173,
+                                            'show_address':True}</attribute>  
+            </xpath>
+        </field>
+    </record>
+</odoo>

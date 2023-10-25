@@ -1,0 +1,55 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="my_product_supplierinfo_tree_view">
+            <field name="name">my.product.supplierinfo.tree.view</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+            <field name="arch" type="xml">
+                <data>	
+                    <field name="min_qty" position="replace">	
+                        <field name="price_anterior"  />
+                    </field>
+                </data>
+            </field>
+        </record>
+        
+        <record id="product_supplierinfo_tree_view" model = "ir.ui.view">
+            <field name = "name">product.supplierinfo.tree</field>
+            <field name = "model">product.supplierinfo</field>
+            <field name = "arch" type = "xml">
+                <tree string="Producto por Proveedores" >
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="product_tmpl_id" string="Producto" />
+                    <field name="min_qty" invisible="1"/>
+                    <field name="price" string="Price"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="product_supplierinfo_search_view">
+            <field name="name">product.supplierinfo.search</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="priority">50</field>
+            <field name="arch" type="xml">
+                <search string="Product">
+                    <field name="product_id" string="Producto"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_product_supplierinfo" model="ir.actions.act_window" >
+            <field name="name">Producto por Proveedores</field>
+            <field name="res_model">product.supplierinfo</field>
+            <field name="view_mode">tree,form</field>
+            <!-- <field name="auto_refresh">10</field> -->
+            <field name="search_view_id" ref="product_supplierinfo_search_view"/>
+            <field name="view_id" ref="product_supplierinfo_tree_view"/>
+        </record>
+        <menuitem name="Producto por Proveedores"
+                  id="menu_product_supplierinfo"
+                  action="action_product_supplierinfo"
+                  parent="stock.menu_stock_inventory_control"
+                  sequence="20"/>
+
+    </data>
+</odoo>

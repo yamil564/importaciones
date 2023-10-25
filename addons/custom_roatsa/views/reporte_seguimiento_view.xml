@@ -1,0 +1,32 @@
+<odoo>
+    <!-- VISTA DE REPORTE (TREE) -->
+    <record id="custom_roatsa.reporte_seguimiento_tree" model="ir.ui.view">
+        <field name="name">Reporte de seguimiento</field>
+        <field name="model">report.seguimiento.pedidos</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Reporte de seguimiento">
+                <field name="order_date"/>
+                <field name="order_user"/>
+                <field name="nro_guia"/>
+                <field name="order_client"/>
+                <field name="order_address"/>
+                <field name="order_number"/>
+                <field name="mov_number"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- MENÚ -->
+    <record model="ir.actions.act_window" id="reporte_seguimiento_action">
+        <field name="name">Reporte de seguimiento</field>
+        <field name="res_model">report.seguimiento.pedidos</field>
+        <!-- <field name="view_type">form</field> -->
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- <menuitem id="menu_reporte_seguimiento" action="reporte_seguimiento_action" parent="stock.menu_warehouse_report"/> -->
+    <!-- Comentado sale.sale_order_menu -->
+    <menuitem id="menu_reporte_seguimiento" action="reporte_seguimiento_action" parent="sale.sale_order_menu"/>
+</odoo>

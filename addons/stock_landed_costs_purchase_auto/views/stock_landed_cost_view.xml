@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_stock_landed_cost_search" model="ir.ui.view">
+        <field name="model">stock.landed.cost</field>
+        <field
+            name="inherit_id"
+            ref="stock_landed_costs.view_stock_landed_cost_search"
+        />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="names_purchase_ids" />
+            </field>
+        </field>
+    </record>
+    <record id="view_stock_landed_cost_form" model="ir.ui.view">
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_cancel']" position="replace">
+                <button name="button_cancel" string="Cancelar" states="draft,done" type="object"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
+            </xpath>
+            <xpath expr="//field[@name='picking_ids']" position="replace">
+                <field name="picking_ids" widget="many2many_tags" domain="[('state', '=', 'done'),('land_cost', '=', False)]"/>
+            </xpath>
+            <xpath expr="//field[@name='picking_ids']" position="after">
+                    <field name="purchase_ids" widget="many2many_tags" />
+                    <field name="names_purchase_ids" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='account_move_id']" position="after">
+                    <field name="currency_id" />
+                    <field name="bl" />
+            </xpath>
+            <xpath expr="//field[@name='cost_lines']//tree//field[@name='price_unit']" position="replace">
+                <field name="price_unit" widget="monetary"/>
+            </xpath>
+            <xpath expr="//field[@name='cost_lines']//tree//field[@name='account_id']" position="replace">
+            </xpath>
+            <field name="valuation_adjustment_lines" position="replace">
+                <field name="stock_valuario_orderlines" >
+                        <tree string="Valuation Adjustments" editable="bottom" create="0">
+                                <field name="name_order" readonly="1"/>
+                                <field name="product_id" readonly="1"/>
+                                <field name="quantity" readonly="1"/>
+                                <field name="former_cost_per_unit" readonly="1" widget="monetary"/>
+                                <field name="former_cost" readonly="1"  widget="monetary"/>
+                                <!--<field name="suma_costes" readonly="1"/>-->
+                                <field name="additional_landed_cost" string="Factor"/>
+                                <field name="final_precio" string="Costo Final"/>
+                                <field name="final_cost"/>
+                        </tree>
+                </field>
+                <group class="oe_subtotal_footer oe_right">
+                    <field name="amount_subtotal_prorrateo" widget="monetary"/>
+                    <field name="amount_total_prorrateo" widget="monetary"/>
+                </group>
+            </field>
+        </field>
+    </record>
+    <record id="view_stock_landed_cost_tree" model="ir.ui.view">
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_tree" />
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="names_purchase_ids" />
+                <field name="picking_ids" />
+                <field name="amount_total_prorrateo" sum="Total"/>
+            </field>
+        </field>
+    </record>
+</odoo>

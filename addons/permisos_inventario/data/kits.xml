@@ -1,0 +1,102 @@
+<odoo>
+    <data>
+        <record id="mrp_bom_form1" model="ir.ui.view">
+            <field name="name">mrp_bom_form1</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='bom_line_ids']//tree//field[@name='product_id']" position="after">
+                    <field name="lst_price" />
+                    <field name="charprice" invisible="1"/>
+                    <field name="discount" />
+                </xpath>
+                <xpath expr="//field[@name='bom_line_ids']//tree//field[@name='product_qty']" position="after">
+                    <field name="price_discount" />
+                </xpath>
+                <xpath expr="//field[@name='bom_line_ids']" position="after">
+                    <group class="oe_subtotal_footer oe_right" colspan="2" name="lista_total">
+                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                            <label for="amount_total"/>
+                        </div>
+                        <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <record id="mrp_bom_tree1" model="ir.ui.view">
+            <field name="name">mrp_bom_tree1</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="replace">
+                    <field name="amount_total" />
+                </xpath>
+            </field>
+        </record>
+        <record id="product_template_form1" model="ir.ui.view">
+            <field name="name">product_template_form1</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='barcode']" position="after">
+                    <field name="hs_code" string="HS Code"/>
+                </xpath>
+                <xpath expr="//field[@name='taxes_id']" position="after">
+                    <field name="price_materiales" widget="monetary"/>
+                </xpath>
+                <!--Precio Visible solo para este grupo de usuarios-->
+                <field name="list_price" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="list_price" position="replace">
+                    <field name="list_price" groups="__export__.res_groups_135_09f38291"/>
+                </field>
+                <!--<xpath expr="//field[@name='price_materiales']" position="after">
+                    <field name="standard_price"/>
+                </xpath>-->
+            </field>
+        </record>
+
+        <!-- Vista heredada para mostrar/ocultar el campo "list_price" en la vista kanban para ciertos grupos -->
+        <record id="product_template_kanban_view_inherited" model="ir.ui.view">
+            <field name="name">product.template.kanban.view.inherited</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <field name="lst_price" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="lst_price" position="replace">
+                    <field name="lst_price" groups="__export__.res_groups_135_09f38291"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Vista heredada para mostrar/ocultar el campo "list_price" en la vista lista para ciertos grupos -->
+        <record id="product_template_tree_view_inherited" model="ir.ui.view">
+            <field name="name">product.template.tree.view.inherited</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="list_price" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="list_price" position="replace">
+                    <field name="list_price" groups="__export__.res_groups_135_09f38291"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="product_product_form1" model="ir.ui.view">
+            <field name="name">product_product_form1</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lst_price']" position="after">
+                    <field name="price_materiales" widget="monetary"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+	<report id="pdf_cotizacion_id"
+            model="sale.order"
+            string="Cotizacion"
+            report_type="qweb-pdf"
+            name="custom_roatsa.pdf_cotizacion_template"  
+            file="custom_roatsa.pdf_cotizacion_template"
+            >
+    </report>
+</data>
+</openerp>

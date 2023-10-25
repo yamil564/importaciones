@@ -1,0 +1,111 @@
+<odoo>
+    <data>
+    <report id="report_custom_stock_landed"
+        string="Reporte Importacion"
+        model="stock.landed.cost"
+        report_type="qweb-pdf"
+        name="reporte_importacion.report_custom_stock_landed"
+    />
+    <template id="report_custom_stock_landed">
+    <t t-call="web.html_container">
+        
+        <t t-foreach="docs" t-as="doc">
+            <!-- Aquí defines la estructura del informe -->
+            <div>
+                <img t-if="doc.company_id.logo" t-att-src="'data:image/png;base64,' + doc.company_id.logo.decode()" style="width: 150px; height: auto;"/>
+                <h3>REPORTE IMPORTACION</h3>
+                <p>Costo Destino: <t t-esc="doc.name"/></p>
+                <p>Fecha: <t t-esc="doc.date"/></p>
+                <p>Transferencia: <t t-esc="doc.picking_ids.name"/></p>
+                <p>DUA: <t t-esc="doc.amount_total"/></p>
+                <!--<p>Valor mercaderia: <t t-esc="doc.valuation_adjustment_lines.former_cost"/></p>-->
+            
+                <table style="width:100%; border-collapse: collapse;">
+                    <tr>
+                        <th style="border: 1px solid black; padding: 8px;">Cant</th>
+                        <th style="border: 1px solid black; padding: 8px;">Producto</th>
+                        <th style="border: 1px solid black; padding: 8px;">Definicion</th>
+                        <th style="border: 1px solid black; padding: 8px;">Factor Destino</th>
+                        <th style="border: 1px solid black; padding: 8px;">Costo Destino</th>
+                        <th style="border: 1px solid black; padding: 8px;">P.U Compra</th>
+                        <th style="border: 1px solid black; padding: 8px;">Factor Aumento</th>
+                        
+                        <th style="border: 1px solid black; padding: 8px;">Aumento Unidad</th>
+                        <th style="border: 1px solid black; padding: 8px;">Valor PC</th>
+                        <th style="border: 1px solid black; padding: 8px;">Valor COMP</th>
+                        
+                        <!--<th style="border: 1px solid black; padding: 8px;">Precio ANT</th>
+                        <th style="border: 1px solid black; padding: 8px;">Valor ANT</th>-->
+                        <!--<th style="border: 1px solid black; padding: 8px;">Costo Actual</th>-->
+                    </tr>
+                    <t t-foreach="doc.valuation_adjustment_lines" t-as="val">
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="val.quantity"/>
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="val.product_id.name"/>
+                            
+                            <!--Nombre Costo Destino-->
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="val.display_name"/>
+                            
+                            <!--Factor costo-->
+                            <t t-set="price_unit" t-value="None"/>
+                            <t t-foreach="doc.cost_lines" t-as="cost_line">
+                                <t t-if="cost_line.product_id.name == val.display_name.split('-')[0].strip()">
+                                    <t t-set="price_unit" t-value="cost_line.price_unit"/>
+                                </t>
+                            </t>
+                            
+                            <t t-set="factorC" t-value="val.additional_landed_cost / price_unit" t-if="price_unit"/>
+                            <t t-set="factorC2" t-value="round((val.additional_landed_cost / price_unit), 2)" t-if="price_unit"/>
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="factorC2"/>
+
+                            <!--Costo destino--> 
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="val.additional_landed_cost"/>
+                            
+                            <!--V.P COMPRA-->
+                            <t t-set="vpcompra" t-value="(val.former_cost / val.quantity)"/>
+                            <t t-set="vpcompra2" t-value="round((val.former_cost / val.quantity),2)"/>
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="vpcompra2"/>
+                            <!--Factor-->
+                            <t t-set="factor" t-value="val.additional_landed_cost / val.former_cost"/>
+                            <t t-set="factor2" t-value="round(val.additional_landed_cost / val.former_cost, 2)"/>
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="factor2"/>
+                            
+                            
+
+                            <!--Valor Costo Destino-->
+                            <t t-set="valorCD" t-value="vpcompra * factor"/>
+                            <t t-set="valorCD2" t-value="round((vpcompra * factor), 2)"/>
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="valorCD2"/>
+
+                            <!--Valor Total de Producto-->
+                            <t t-set="valorTP" t-value="vpcompra + valorCD"/>
+                            <t t-set="valorTP2" t-value="round((vpcompra + valorCD), 2)"/>
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="valorTP2"/>
+
+                            <!--Valoracion compra total-->
+                            <t t-set="valoracionCP" t-value="valorTP * val.quantity"/>
+                            <t t-set="valoracionCP2" t-value="round((valorTP * val.quantity), 2)"/>
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="valoracionCP2"/>
+
+                            
+                            
+                            <!--Cantidad antes de compra
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="val.product_id.qty_available - val.quantity"/>-->
+
+                            <!--Precio antes de compra
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="(round((val.product_id.qty_available * val.product_id.standard_price) - valoracionCP, 0)) / (val.product_id.qty_available - val.quantity)"/>-->
+
+                            <!--Valoracion antes de la compra
+                            <td style="border: 1px solid black; padding: 8px;" t-esc="round((val.product_id.qty_available * val.product_id.standard_price) - valoracionCP, 0)"/>-->
+                            
+                            <!--<td style="border: 1px solid black; padding: 8px;" t-esc="val.product_id.standard_price"/>-->
+                            
+                        </tr>
+                    </t>
+                </table>
+            </div>
+        </t>
+    </t>
+    </template>
+    </data>
+</odoo>

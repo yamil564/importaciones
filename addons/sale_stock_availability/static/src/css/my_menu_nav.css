@@ -1,0 +1,13 @@
+.modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+        content: "isoft3"!important;
+        visibility: hidden;
+    }
+.modal-title:before {
+        margin: 0;
+        line-height: 1.42857143;
+        content: "isoft3"!important;
+        visibility: visible;
+    }
+

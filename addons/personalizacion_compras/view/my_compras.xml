@@ -1,0 +1,90 @@
+<odoo>
+    <data>
+        <record id="purchase_order_form1" model="ir.ui.view">
+            <field name="name">purchase_order_form1</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <!--<xpath expr="//field[@name='bom_line_ids']//tree//field[@name='product_id']" position="after">
+                    <field name="lst_price" />
+                </xpath>-->
+                <!--<header>
+                    <xpath expr="//button[@name='print_quotation']" position="replace">
+                        <button name="print_quotation" string="Print" type="object" groups="base.group_user"/>
+                    </xpath>
+                </header>-->
+                <xpath expr="//field[@name='date_order']" position="after">
+                    <field name="create_uid"  readonly="1"/>
+                    <field name="cliente"  />
+                    <field name="tipo_pago"  />
+                    <field name="payment_term_id" attrs="{'invisible':[('tipo_compra_le','=','Importacion')]}" />
+                    <field name="invoice_status"></field>
+                    <!--<field name="date_planned"></field>-->
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="autorizado_por" required="1" domain = "[('id', 'in', ('36','40'))] "/>
+                </xpath>
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <!--<field name="currency_id"></field>-->
+                    <field name="verificado_por" domain = "[('id', 'in', ('36','40'))] " />
+                    <!--<field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" />-->
+                </xpath>
+                <!--<xpath expr="/form/sheet/notebook/page[2]" position="replace">
+                    <page string="Documentos" name="Documentos">
+                        <group>        
+                            <field name="archivo_guia"  />
+                            <field name="archivo_factura"  />
+                        </group>
+                        <group>        
+                            <field name="archivo_transferencia"  />
+                            <field name="archivo_extra"  />
+                        </group>
+                    </page>
+                </xpath>-->
+                <!--<xpath expr="/form/sheet/notebook/page[2]" position="after">
+                    <page string="Informacion Adicional" name="informacion_adicional">
+                        <group>        
+                            <field name="note"  />
+                            <field name="port"  />
+                        </group>
+                        <group>        
+                            <field name="delivery_time"  />
+                            <field name="payment_terms"  />
+                        </group>
+                    </page>
+                </xpath>-->
+            </field>
+        </record>
+        <record id="purchase_order_tree1" model="ir.ui.view">
+            <field name="name">purchase_order_tree1</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_status']" position="replace">
+                    <field name="autorizado_por"  />
+                    <field name="verificado_por"  />
+                </xpath>
+                <xpath expr="//field[@name='date_planned']" position="replace">
+                </xpath>
+                <xpath expr="//field[@name='date_order']" position="replace">
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="replace">
+                </xpath>
+                <!--<xpath expr="//field[@name='state']" position="replace">
+                </xpath>-->
+                <xpath expr="//field[@name='amount_untaxed']" position="replace">
+                </xpath>
+                <xpath expr="//field[@name='amount_total']" position="replace">
+                    <field name="amount_total"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="date_order" />
+                    <field name="create_uid" />
+                </xpath>
+            </field>
+        </record>
+        
+       
+    </data>
+</odoo>
+

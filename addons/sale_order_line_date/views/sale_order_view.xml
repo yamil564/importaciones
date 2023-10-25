@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="sale_order_commitment_date_form_view" model="ir.ui.view">
+        <field name="name">sale.order.commitment.date.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <field name="order_line" position="attributes">
+                <attribute
+                    name="context"
+                >{'default_commitment_date':commitment_date}</attribute>
+            </field>
+            <xpath
+                expr="//field[@name='order_line']/form//field[@name='tax_id']"
+                position="after"
+            >
+                <field name="commitment_date" />
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/tree/field[@name='price_unit']"
+                position="after"
+            >
+                <field name="commitment_date" optional="show" />
+            </xpath>
+        </field>
+    </record>
+    <record id="sale_order_line_ext_tree_view" model="ir.ui.view">
+        <field name="name">sale.order.line.ext.tree</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_order_line_tree" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="commitment_date" optional="show" />
+            </field>
+        </field>
+    </record>
+    <!--Politica de descuentos-Tarifa-->
+    <record id="add_des_tarifa" model="ir.ui.view">
+        <field name="name">add.des.tarifa</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='currency_id']" position='before'>
+                    <field name="discount_policy" string="Política de descuentos"/>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_ajustes_tarifas"
+        name="Tarifas"
+        parent="sale.menu_sale_config"
+        action=""
+        sequence="11"/>
+    <menuitem
+        id="menu_ajustes_localizacion"
+        name="Localización"
+        parent="sale.menu_sale_config"
+        action=""
+        sequence="12"/>
+</odoo>

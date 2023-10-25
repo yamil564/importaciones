@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+	<report id="pdf_landed_cost_id"
+            model="stock.landed.cost"
+            string="Embarque"
+            report_type="qweb-pdf"
+            name="stock_landed_costs_purchase_auto.pdf_landed_cost_template"  
+            file="stock_landed_costs_purchase_auto.pdf_landed_cost_template"
+            menu="True"
+            >
+    </report>
+</data>
+</openerp>

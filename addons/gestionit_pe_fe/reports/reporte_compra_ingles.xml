@@ -1,0 +1,260 @@
+<odoo>
+    <data>
+    <report id="reporte_compra_ingles"
+        string="Report Purchase Order"
+        model="purchase.order"
+        report_type="qweb-pdf"
+        name="gestionit_pe_fe.reporte_compra_ingles"
+    />
+    <template id="gestionit_pe_fe.reporte_compra_ingles" >
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <!-- Aquí defines la estructura del informe -->
+            <!--CABECERA-->
+            <t t-set="company" t-value="o.company_id"/>
+            <div t-attf-class="header o_company_#{company.id}_layout">
+                <t t-set="o" t-value="o if o else (doc if doc else docs[0])"/>
+                <div class="o_report_header_pe_v1">
+                    <div class="row">
+                        <div class="col-3" name="company_logo">
+                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" class="w-100"/>
+                        </div>
+                        <div class="col-5" name="company_address">
+                            <div>
+                                <span t-field="company.name"/>
+                            </div>
+                            <div>
+                                <span t-field="company.street"/>
+                            </div>
+                            <div t-if="company.email">
+                                <b> Email: </b>
+                                <span>importaciones@roatsa.com</span>
+                            </div>
+                            <div t-if="company.phone">
+                                <b> Phone: </b>
+                                <span>51-1-6131131</span>
+                            </div>
+                            <div t-if="company.website">
+                                <b> Website: </b>
+                                <span t-field="company.website"/>
+                            </div>
+                        </div>
+                        <div class="col-4" name="company_document">
+                            <div class="pt-2">
+                                <div class="text-center">
+                                    <b>
+                                        <span>PURCHASE ORDER</span>
+                                    </b>
+                                </div>
+                                <div class="text-center">
+                                    <span t-esc="'R.U.C. {}'.format(company.vat or '')"/>
+                                </div>
+                                <div class="text-center">
+                                    <span t-esc="o.name"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        <!--CUERPO-->
+        <div name="" class="w-100 mb16" style="border: 1px solid #000; border-radius: 15px; padding: 10px;">
+                <table class="w-100" style="text-align: left;">
+                    <tr>
+                        <!-- CLIENTE -->
+                        <th class="l_partner" width="20%">
+                            <label style="font-size: 10px" t-esc="'PROVEEDOR : '"/>
+                        </th>
+                        <td class="v_partner" width="40%">
+                            <t t-if="o.partner_id.parent_id">
+                                <span style="font-size: 10px;margin-right: 5px;" t-esc="o.partner_id.parent_name.upper()"/>
+                            </t>
+                            <t t-else="">
+                                <span style="font-size: 10px" t-esc="o.partner_id.name.upper()"/>
+                            </t>
+                        </td>
+                        
+                         <!-- FECHA EMISIÓN -->
+                        <th>
+                            <label style="font-size: 10px" t-esc="'FECHA DE EMISIÓN : '"/>
+                        </th>
+                        <td class="v_partner" width="40%">
+                            <!--<span style="font-size: 12px" t-esc="doc.date_order" t-if="doc.date_order"/>-->
+                            <span style="font-size: 10px" t-esc="o.create_date.date().strftime('%d/%m/%Y')"/>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <!-- ATENCIÓN -->
+                        <th>
+                            <label style="font-size: 10px" t-esc="'ATENCION : '"/>
+                        </th>
+                        <td>
+                            <!--<span t-esc="doc.user_id.name"/>-->
+                            <t t-if="o.partner_id.parent_id">
+                                <span style="font-size: 10px" t-field="o.partner_id.title"/> <span style="font-size: 10px" t-esc="o.partner_id.name.upper()"/>
+                            </t>
+                            <t t-else="">
+                                <span></span>
+                            </t>
+                            
+                        </td>
+
+                        <!-- REFERENCIA -->
+                        <th>
+                            <label style="font-size: 10px" t-esc="'REFERENCIA : '"/>
+                        </th>
+                        <td>
+                            <span style="font-size: 10px" t-esc="o.partner_ref" />
+                        </td>
+                       
+                    </tr>
+                    <tr>
+                         <!-- TAX ID -->
+                        <th>
+                            <label style="font-size: 10px" t-esc="'TAX ID : '"/>
+                        </th>
+                        <td>
+                            <span style="font-size: 10px" t-esc="o.partner_id.vat"/>
+                        </td>
+
+                        <!-- MONEDA -->
+                        <th>
+                            <label style="font-size: 10px" t-esc="'MONEDA : '"/>
+                        </th>
+                        <td>
+                            <span style="font-size: 10px" t-esc="o.currency_id.currency_unit_label.upper()" t-if="o.currency_id.currency_unit_label"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- TELÉFONO -->
+                        <th>
+                            <label style="font-size: 10px" t-esc="'TELEFONO : '" />
+                        </th>
+                        <td>
+                            <span style="font-size: 10px" t-field="o.partner_id.phone"/>
+                        </td>
+
+                        <!-- INCOTERM -->
+                        <th style="white-space: nowrap;">
+                            <label style="font-size: 10px" t-esc="'INCOTERM: '"/>
+                        </th>
+                        <td>
+                            <span style="font-size: 10px" t-esc="o.incoterm_id.code"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- EMAIL -->
+                        <th>
+                            <label style="font-size: 10px" t-esc="'EMAIL : '" />
+                        </th>
+                        <td>
+                            <span style="font-size: 10px" t-esc="o.partner_id.email.upper()" t-if="o.partner_id.email"/>
+                        </td>
+                    </tr>
+                </table>
+        </div>
+        <br/>
+        <br/>
+        <!--TABLA-->
+        
+            <table style="width:100%;border-collapse: collapse; border-radius: 10px;border: 1px solid #ccc;">
+                    
+                        <tr style="background-color: lightgray;">
+                            <th style="border: 1px solid #ccc; padding: 8px;font-size: 10px">ITEM</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;font-size: 10px">ROATSA CODE</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;font-size: 10px">SUPLIER CODE</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;font-size: 10px">DESCRIPCION</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;font-size: 10px">U.M.</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;font-size: 10px">CANT</th>
+                            <th style="border: 1px solid #ccc; padding: 8px;font-size: 10px">PRECIO UNIT</th>
+                            <!-- <th class="h_discount" t-if="display_discount">Dscto.(%)</th> -->
+                            <th style="border: 1px solid #ccc; padding: 8px;font-size: 10px">TOTAL</th>
+                        </tr>
+                    
+                    
+                        <t t-set="item" t-value="1"/>
+                        <t t-set="order_line" t-value="o.order_line"/>
+                        <tr t-foreach="order_line.sorted('sequence')" t-as="l">
+                            <t t-if="not l.display_type">
+                                <td style="border: 1px solid #ccc; padding: 8px;">
+                                    <span t-esc="item"/>
+                                </td>
+                                <td style="border: 1px solid #ccc; padding: 8px;">
+                                    <span t-field="l.default_code"/>
+                                </td>
+                                <td style="border: 1px solid #ccc; padding: 8px;">
+                                    <span t-field="l.codigo_producto"/>
+                                </td>
+                                <td style="border: 1px solid #ccc; padding: 8px;">
+                                    <span t-field="l.product_id.name"/>
+                                </td>
+                                <td style="border: 1px solid #ccc; padding: 8px;">
+                                    <span t-esc="l.product_uom.name"/>
+                                </td>
+                                <td style="border: 1px solid #ccc; padding: 8px;">
+                                    <span t-esc="l.product_uom_qty"/>
+                                </td>
+                                <td style="border: 1px solid #ccc; padding: 8px;">
+                                    <span t-esc="0 if l.product_uom_qty == 0 else  round((l.price_total/l.product_uom_qty),2)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </td>
+                                <!-- <td class="v_discount" t-if="display_discount">
+                                    <span t-if="l.discount &gt; 0">
+                                        <span t-esc="round(l.price_total/l.product_uom_qty,4)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                        <span t-esc="'('+str(l.discount)+'%)'"/>
+                                    </span>
+                                </td> -->
+                                <td style="border: 1px solid #ccc; padding: 8px;">
+                                    <span t-field="l.price_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </td>
+                                <t t-set="item" t-value="item+1"/>
+                            </t>
+
+                            <t t-if="l.display_type == 'line_section'">
+                                <td colspan="99" id="section">
+                                    <span t-field="l.name"/>
+                                </td>
+                                <t t-set="current_section" t-value="l"/>
+                                <t t-set="current_subtotal" t-value="0"/>
+                            </t>
+                            <t t-if="l.display_type == 'line_note'">
+                                <td colspan="99" id="note">
+                                    <span t-field="l.name"/>
+                                </td>
+                            </t>
+                        </tr>
+                    
+            </table>
+        
+        <!--FINAL-->
+        <br/>
+        <div class="row mt16" id="total" style="text-align: right;">
+             <strong>Total</strong>
+             <td style="text-align: right;">
+                <span class="text-nowrap" t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+            </td>
+        </div>
+        <div class="row mt16" id="total">
+                <div class="col-8">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <p><span t-esc="'TERMS AND CONDITIONS'"/></p>
+                    <p><span>PAYMENT TERM: <t t-esc="o.payment_term_id.name.upper() if o.payment_term_id.name else ''"/></span></p>
+                    <p><span t-esc="'DELIVERY TIME: {}'.format(o.date_planned.strftime('%Y-%m-%d') if o.date_planned else '')"/></p>
+                    <p><span t-esc="'WAY OF SHIPMENT: {}'.format(o.way_of_shipment if o.way_of_shipment else '')"/></p>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <p><span t-esc="'AUTHORIZED BY: {}'.format(o.autorizado_por.name.upper())"/></p>
+                    <p><span t-esc="'USER: {}'.format(o.user_id.name.upper())"/></p>
+                    
+                </div>
+                
+            </div>
+        </t>
+    </t>
+    </template>
+    </data>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_zk_motivo_falta_form" model="ir.ui.view">
+        <field name="name">zk.motivo.falta.form</field>
+        <field name="model">motivo.falta</field>
+        <field name="arch" type="xml">
+            <form string="Motivos de falta">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zk_motivo_falta_tree" model="ir.ui.view">
+        <field name="name">zk.motivo.falta.tree</field>
+        <field name="model">motivo.falta</field>
+        <field name="arch" type="xml">
+            <tree string="Motivos de falta">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="zk_motivo_falta_action" model="ir.actions.act_window">
+        <field name="name">motivo.falta</field>
+        <field name="res_model">motivo.falta</field>
+        <!--<field name="view_type">form</field>-->
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'tz': 'America/Lima'}</field>
+    </record>
+
+    <menuitem id="zk_motivo_falta_sub_menu" parent="zk_machine_menu" name="Motivos de falta" action="zk_motivo_falta_action" sequence="1"/>
+    <menuitem id="zk_machine_sub_menu" parent="zk_machine_menu"  name="Configuración del dispositivo" action="zk_machine_action" sequence="1"/>
+</odoo>

@@ -1,0 +1,201 @@
+<odoo>
+    <data>
+        <!-- Credenciales de SUNAT para la compañia -->
+        <record model="ir.ui.view" id="facturacion_electronica.rescompany_form">
+            <field name="name">Campo Clave Privada y Publica</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page name="sunat_config" string="SUNAT config">
+                        <group>
+                            <!-- <field name="account_dashboard_onboarding_state"/> -->
+                            <field name="account_invoice_onboarding_state"/>
+                        </group>
+                    </page>
+                    <page name="certificados" string="Certificados Digitales">
+                        <group>
+                            <field name="sunat_username"/>
+                            <field name="sunat_password"/>
+                            <field name="private"/>
+                            <field name="public"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Formulario DIARIO -->
+        <record model="ir.ui.view" id="facturacion_electronica.journal_form">
+            <field name="name">Tipo de documento - Form</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="invoice_type_code_id"/>
+                </xpath><!--falta -->
+            </field>
+        </record>
+
+        <!-- Listado DIARIO -->
+        <record model="ir.ui.view" id="facturacion_electronica.journal_tree">
+            <field name="name">Tipo de documento - Tree </field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="invoice_type_code_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Formulario UNIDAD DE MEDIDA -->
+        <record model="ir.ui.view" id="facturacion_electronica.form_unidad_medida_cat03">
+            <field name="name">Agregación de campos a Form de unidad - Cat03</field>
+            <field name="model">uom.uom</field>
+            <field name="inherit_id" ref="uom.product_uom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='uom_type']" position="before">
+                    <!-- <field name="code"/> -->
+                    <!-- <field name="description"/> -->
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Listado UNIDAD DE MEDIDA -->
+        <record model="ir.ui.view" id="facturacion_electronica.tree_unidad_medida_cat03">
+            <field name="name">Agregación de Campos a tree - cat03</field>
+            <field name="model">uom.uom</field>
+            <field name="inherit_id" ref="uom.product_uom_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='uom_type']" position="before">
+                    <!-- <field name="code"/> -->
+                    <!-- <field name="description"/> -->
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Formulario INVOICE falta-->
+        <record model="ir.ui.view" id="facturacion_electronica.button_invoice_form">
+            <field name="name">Boton para generar factura</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_invoice_sent']" position="after">
+                    <button name="generarFactura"
+                        string="Generar Factura"
+                        type="object"
+                        groups="base.group_no_one" attrs="{'invisible':[('type_name','!=','01')]}"/><!--attrs="{'invisible':[('invoice_type_code','!=','01')]}"-->
+                    <button name="generarNotaCredito"
+                        string="Generar NOTA DE CREDITO"
+                        type="object"
+                        groups="base.group_no_one" attrs="{'invisible':[('type_name','!=','07')]}"/>
+                    <button name="generarNotaDebito"
+                        string="Generar Nota de Débito"
+                        type="object"
+                        attrs="{'invisible':[('type_name','!=','08')]}"
+                        groups="base.group_no_one"/> 
+                    <button name="firmar" 
+                        string="Firmar" 
+                        type="object"
+                        groups="base.group_no_one"/>
+                    <field name="invoice_sent" invisible="1" />
+                    <button name="enviar"
+                        string="Enviar SUNAT"
+                        type="object"
+                        attrs="{'invisible':[('invoice_sent', '=', True)]}"/>
+                    <button name="estadoTicket"
+                        string="Consultar SUNAT"
+                        type="object"/>
+                    <field name="type_name" invisible="1"/>
+                    <!--<button name="descargarRespuesta" string="Descargar Respuesta" type="object" groups="base.group_no_one"/>-->
+                </xpath>
+            </field>
+        </record>
+
+        <!-- TREE INVOICE -->
+        <record model="ir.ui.view" id="facturacion_electronica.invoice_tree">
+            <field name="name">Tree invoice SUNAT</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <data>
+                    <!-- <tree position="attributes">
+                        <attribute name="decoration-bf">invoice_origin == '0001'</attribute>
+                        <attribute name="decoration-warning">invoice_origin in ('0004', '0005', '0006', '0007', '0008', '0009', '0010', '0011', '0012')</attribute>
+                    </tree> -->
+                </data>
+                <xpath expr="//field[@name='invoice_origin']" position="replace">
+                    <field name="invoice_origin" invisible="1"></field>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name"></field>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name="access_token"></field>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- falta de 140 a 277        -->
+
+        <!-- Formulario SALE ORDER -->
+        <record model="ir.ui.view" id="facturacion_electronica.field_tipo_venta">
+          <field name="name">Tipo de Venta</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_order_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='partner_id']" position="after">
+                <!-- <field name="tipo_venta" attrs="{'readonly':[['state','not in',['draft','sent']]],'required':True}"/>    -->
+                  <!-- <field name="tipo_venta" widget="radio" /> -->
+                <field name="tipo_documento" attrs="{'readonly':[['state','not in',['draft','sent']]],'required':True}"/>
+              </xpath>
+              <xpath expr="//group[@name='sales_person']" position="after">
+                        <group>
+                            <field name = "forma_de_pago"/>
+                            <field name="termino_pago_sunat">
+                                <tree>
+                                    <!--<field name = "amount"/>-->
+                                    <!--<field name = "fecha_vencimiento"/>-->
+                                </tree>
+                            </field>
+                        </group>
+                </xpath>
+                <!--<page string="Other Information">
+                            <group>
+                                <group string="Sales Information" name="sales_person">
+                                    <field name="user_id"/>
+                                    <field name="team_id" options="{'no_create': True}"/>
+                                    <field name="client_order_ref"/>
+                                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                                    <field name="project_id" attrs="{'invisible':[('state','=','sale')]}" context="{'default_partner_id':partner_invoice_id, 'default_name':name}" groups="analytic.group_analytic_accounting"/>
+                                    <field name="related_project_id" attrs="{'readonly': ['|',('project_id','!=',False),('invoice_count','!=',0),('state','=','sale')],'invisible':[('state','!=','sale')]}" context="{'default_partner_id':partner_invoice_id, 'default_name':name}" groups="analytic.group_analytic_accounting"/>
+                                </group>
+                                <group name="sale_pay" string="Invoicing">
+                                    <field name="fiscal_position_id" options="{'no_create': True}"/>
+                                    <field name="invoice_status" attrs="{'invisible': [('state', 'not in', ('sale','done'))]}"/>
+                                </group>
+                                <group string="Reporting" name="technical" groups="base.group_no_one">
+                                    <field groups="base.group_no_one" name="origin"/>
+                                </group>
+                            </group>
+                </page>-->
+              <!--<xpath expr="//field[@name='carrier_id']" position="replace">
+                <field name="carrier_id" invisible="1"/>
+              </xpath>-->
+          </field>
+      </record>
+      <!--Aqui arreglar  
+      <record model="ir.ui.view" id="sin_metodo_envio">
+          <field name="name">sin_metodo_envio</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="delivery.view_order_form_with_carrier"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='carrier_id']" position="replace">
+                <field name="carrier_id" invisible="1"/>
+              </xpath>
+          </field>
+      </record>-->
+
+    </data>
+</odoo>

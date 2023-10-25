@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_zk_machine_form" model="ir.ui.view">
+        <field name="name">zk.machine.form</field>
+        <field name="model">zk.machine</field>
+        <field name="arch" type="xml">
+            <form string="Dispositivo biométrico">
+                <header>
+                    <button name="clear_attendance" type="object" string="Borrar datos" class="oe_highlight"
+                                icon="fa-remove " confirm="¿Estás segura de que quieres hacer esto?"/>
+                    <button name="download_attendance" type="object" string="Descargar datos" class="oe_highlight"
+                            icon="fa-download " confirm="¿Estás segura de que quieres hacer esto?" />
+                    <button name="try_connection" type="object" string="Prueba la conexión"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h1>
+                            <field name="name" placeholder="IP de la máquina"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="port_no"/>
+                            <field name="zk_timeout"/>
+                            <field name="zk_after_date"/>
+                            <field name="address_id"/>
+                            
+                            
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zk_machine_tree" model="ir.ui.view">
+        <field name="name">zk.machine.tree</field>
+        <field name="model">zk.machine</field>
+        <field name="arch" type="xml">
+            <tree string="Dispositivo biométrico">
+                <field name="name"/>
+                <field name="port_no"/>
+                <field name="address_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="zk_machine_action" model="ir.actions.act_window">
+        <field name="name">Attendances</field>
+        <field name="res_model">zk.machine</field>
+        <!--<field name="view_type">form</field>-->
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'tz': 'America/Lima'}</field>
+    </record>
+
+    <record id="hr_employee_inherit_form_view" model="ir.ui.view">
+        <field name="name">hr.employee.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="device_id"/>
+                <field name="sueldo"/>
+                <field name="descuentohora"/>
+            </field>
+            <field name="address_id" position="before">
+                <field name="empresa"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem id="zk_machine_menu" parent="hr_attendance.menu_hr_attendance_root" sequence="50" name="Gestion biométrico" groups="hr_attendance.group_hr_attendance_manager"/>
+    <menuitem id="zk_machine_sub_menu" parent="zk_machine_menu"  name="Configuración del dispositivo" action="zk_machine_action" sequence="1" groups="hr_attendance.group_hr_attendance_manager"/>
+</odoo>
+

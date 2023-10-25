@@ -1,0 +1,40 @@
+<odoo>
+    <!-- Detracciones TREE -->
+    <record id="view_tree_account_detracciones" model="ir.ui.view">
+        <field name="name">Detracciones Tree</field>
+        <field name="model">account.detraccion</field>
+        <field name="arch" type="xml">
+            <tree string="Detracciones">
+                <field name="nombre"/>
+                <field name="porcentaje"/>
+                <field name="fecha_uso"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Detracciones FORM -->
+    <record id="view_form_account_detracciones" model="ir.ui.view">
+        <field name="name">Detracciones Form</field>
+        <field name="model">account.detraccion</field>
+        <field name="arch" type="xml">
+            <form string="Detracciones">
+                <group>
+                    <field name="nombre"/>
+                    <field name="porcentaje"/>
+                    <field name="fecha_uso"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Detracciones -->
+    <record id="account_detracciones" model="ir.actions.act_window">
+        <field name="name">Detracciones</field>
+        <field name="res_model">account.detraccion</field>
+        <!-- <field name="view_type">form</field>-->
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Detracciones -->
+    <menuitem name="Detracciones" id="detracciones_menu" parent="account.menu_finance_configuration" action="account_detracciones" sequence="10"/>
+</odoo>

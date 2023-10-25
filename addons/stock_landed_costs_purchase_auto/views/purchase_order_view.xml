@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="my_purchase_order_tree2">
+        <field name="name">Amount total dolar</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <field name="arch" type="xml">
+            <data>	
+                <field name="amount_total" position="after">	
+                    <field name="amount_total_dolar"  />
+                    <field name="amount_total_dolar2" invisible="1"/>
+                </field>
+            </data>
+        </field>
+    </record>
+    <record id="view_purchase_checkbox_button_form" model="ir.ui.view">
+        <field name="name">purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/> 
+        <field name="arch" type="xml">
+            <xpath expr ="//field[@name='order_line']//tree/field[@name='qty_received']" position="after"> 
+                    <field name="observacion" invisible="not context.get('show_purchase', False)"/>
+            </xpath>
+            <xpath expr ="//field[@name='date_order']" position="after"> 
+                    <!--<field name="incoterm_id" attrs="{'invisible':[('tipo_compra_le','=','Local')]}" />-->
+                    <field name="tipo_compra_le" />
+                    <field name="ratio_actual" />
+            </xpath>
+        </field>		
+    </record>
+
+    <!--<record id="purchase_order_form" model="ir.ui.view">
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form" />
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_view_stock_landed_cost"
+                    string="Costos envio"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-list-alt"
+                    attrs="{'invisible': ['|',('landed_cost_number', '=', 0),('tipo_compra_le','=','Local')]}"
+                >
+                    <field
+                        name="landed_cost_number"
+                        widget="statinfo"
+                        string="Landed Costs"
+                        invisible="1"
+                    />
+                    <field name="tipo_compra_le" invisible="1"/>
+                </button>
+            </xpath>
+        </field>
+    </record>-->
+
+    <record id="purchase.purchase_form_action" model="ir.actions.act_window" >
+            <field name="name">Pedidos de compra (importaciones)</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="view_id" ref="purchase.purchase_order_tree"/>
+            <field name="domain">
+                [('state','not in',('draft','sent', 'confirmed')),('tipo_compra_le','=','Importacion')]
+            </field>
+            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="context">{'search_default_todo':1, 'show_purchase': True,'default_tipo_compra_le':'Importacion'}</field>
+    </record>
+
+     <record id="purchase.purchase_rfq" model="ir.actions.act_window" >
+            <field name="name">Solicitudes de presupuesto (importaciones)</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="view_id" ref="purchase.purchase_order_tree"/>
+            <field name="domain">
+                [('state','in',('draft','sent','cancel', 'confirmed')),('tipo_compra_le','=','Importacion')]
+            </field>
+            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="context">{'search_default_todo':1, 'default_tipo_compra_le':'Importacion'}</field>
+    </record>
+    
+    <!-- Presupuesto Compras locales -->
+
+    <!--<record id="view_purchase_order_filter_local" model="ir.ui.view">
+        <field name="name">request.quotation.select.local</field>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+                <search string="Search Purchase Order">
+                    <field name="name" string="Reference"/>
+                    <field name="partner_id" operator="child_of"/>
+                    <field name="product_id"/>
+                    <field name="create_uid"/>
+                    <filter name="draft" string="Quotations" domain="[('state','in',('draft','sent','to approve'))]"/>
+                    <filter name="approved" string="Purchase Orders" domain="[('state','in',('purchase','done'))]"/>
+                    <filter name="to_approve" string="To Approve" domain="[('state', '=', 'to approve')]"/>
+                    <separator/>
+                    <filter name="not_invoiced" string="Waiting Bills" domain="[('invoice_status','=', 'to invoice')]" help="Purchase orders that include lines not invoiced."/>
+                    <filter name="invoiced" string="Bills Received" domain="[('invoice_status','=', 'invoiced')]" help="Purchase orders that have been invoiced."/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Vendor" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Order Date" domain="[]" context="{'group_by':'date_order'}"/>
+                        <filter string="Expected Date" domain="[]" context="{'group_by':'date_planned'}"/>
+                    </group>
+                </search>
+            </field>
+    </record>-->
+
+    <record id="purchase_form_action_local" model="ir.actions.act_window" >
+            <field name="name">Solicitudes de presupuesto local</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="view_id" ref="purchase.purchase_order_tree"/>
+            <field name="domain">
+                [('state','in',('draft','sent','cancel', 'confirmed')),('tipo_compra_le','=','Local')]
+            </field>
+            <!--<field name="search_view_id" ref="view_purchase_order_filter_local"/>-->
+            <field name="context">{'search_default_todo':1, 'default_tipo_compra_le':'Local'}</field>
+    </record>
+
+
+    <menuitem name="Solicitudes de presupuesto local"
+                  id="menu_purchase_rfq_local"
+                  action="purchase_form_action_local"
+                  parent="purchase.menu_procurement_management"/>
+
+    <!-- Pedidos Compras locales -->
+
+    <record id="purchase_form_action_pedido_local" model="ir.actions.act_window" >
+            <field name="name">Pedidos de compra local</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="view_id" ref="purchase.purchase_order_tree"/>
+            <field name="domain">
+                [('state','not in',('draft','sent', 'confirmed')),('tipo_compra_le','=','Local')]
+            </field>
+            <!--<field name="search_view_id" ref="view_purchase_order_filter_local"/>-->
+            <field name="context">{'search_default_todo':1, 'show_purchase': True,'default_tipo_compra_le':'Local'}</field>
+    </record>
+
+
+    <menuitem name="Pedidos de compra local"
+                  id="menu_purchase_form_action_local"
+                  action="purchase_form_action_pedido_local"
+                  parent="purchase.menu_procurement_management"/>
+
+    <!-- Sequences for purchase.order --> 
+        <record id="seq_purchase_order_local" model="ir.sequence">
+            <field name="name">Purchase Order Local</field>
+            <field name="code">purchase.order.local</field>
+            <field name="prefix">POL</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    <!-- Todos los pedidos y presupuestos -->
+    <record id="purchase_form_action_todos" model="ir.actions.act_window" >
+            <field name="name">Ordenes de compra</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="view_id" ref="purchase.purchase_order_tree"/>
+            <!--<field name="search_view_id" ref="view_purchase_order_filter_local"/>-->
+    </record>
+    <menuitem name="Ordenes "
+                  id="menu_purchase_form_action_todos"
+                  action="purchase_form_action_todos"
+                  sequence="200"
+                  parent="purchase.menu_procurement_management"/>
+</odoo>

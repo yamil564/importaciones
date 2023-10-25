@@ -1,0 +1,20 @@
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_warehouse">
+            <field name="name">stock.warehouse</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="stock.view_warehouse"/>
+            <field name="arch" type="xml">
+                <field name="code" position="after">
+                    <field name="disable_sale_stock_warning"/>
+                </field>
+            </field>
+        </record>
+
+        <template id="menu_nav" name="My Module CSS Assets menu" inherit_id="web.webclient_bootstrap">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/sale_stock_availability/static/src/css/my_menu_nav.css"/>
+            </xpath>
+        </template>
+    </data>
+</openerp>

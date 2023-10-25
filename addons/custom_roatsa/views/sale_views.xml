@@ -1,0 +1,70 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="custom_roatsa.gastos_adicionales">
+            <field name="name">Gastos adicionales</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <!-- Referencia del cliente-->
+                <xpath expr="//field[@name='date_order']" position="after">
+                     <field name="client_order_ref" attrs="{'invisible':1}"/>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page name="gastos_adicionales" string="Gastos adicionales">
+                        <group>
+                            <field name="detalle_gastos">
+                                <tree string="Detalle" editable="bottom">
+                                    <field name="descripcion"/>
+                                    <field name="monto"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='amount_tax']" position="after">
+                    <field name="total_gastos"/>
+                </xpath>
+                <xpath expr="//field[@name='validity_date']" position="replace">
+                    <field name="validez"/>
+                    <field name="nreq"/>
+                </xpath>
+                <!--Cambiar nombre: de plazo a forma de pago-->
+                 <xpath expr="//field[@name='payment_term_id']" position="replace">
+                    <field name="payment_term_id" string="Forma de pago"/>
+                </xpath>
+                <!-- <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="cod_prov"/>
+                    <field name="kits">
+                        <tree editable="bottom">
+                            <field name="order_id" invisible="1"/>
+                            <field name="name"/>
+                            <field name="detalle"/>
+                            <field name="monto"/>
+                        </tree>
+                    </field>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
+                    <field name="codigo_proveedor" attrs="{'invisible':[('cod_prov','=',False)]}" />
+                    <field name="cod_prov" invisible="1"/>
+                </xpath> -->
+
+
+                <xpath expr="//field[@name='order_line']//tree//field[@name='product_uom']" position="replace">
+                    <!--<field name="product_uom" attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}" context="{'company_id': parent.company_id}" groups="product.group_uom" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>-->
+                    <field name="product_uom" attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}" context="{'company_id': parent.company_id}" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+
+                    <field name="disponibilidad" />
+                    <field name="order_number" invisible="1"/>
+                    <!-- <field name="kit_id" domain="[('order_id', '=', order_number)]" options="{'no_create': True, 'no_create_edit':True}" /> -->
+                    <field name="price_prueba" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='tax_id']" position="after">
+                    <field name="discount" />
+                </xpath>
+                <!-- <xpath expr="//button[@name='print_quotation']" position="after">
+                    <button name="create_kit" string="Crear kits" />
+                </xpath> -->
+            </field>
+        </record>
+    </data>
+</odoo>

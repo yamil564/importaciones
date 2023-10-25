@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="pdf_presupuesto_provee_report">    		
+    <t t-if="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id"></t>
+    </t>
+    <t t-if="not o or not 'company_id' in o">
+        <t t-set="company" t-value="res_company"></t>
+    </t>
+    <div class="header">
+        <div class="row">
+            <div class="col-xs-6  text-left">
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 100px;" />
+            </div>
+            <div class="col-xs-6  text-right">
+                <div class="row" style="color: #af3c36; font-size:35px;">
+                    PURCHASE ORDER
+                </div>
+                <div class="row" style="font-size:24px;">
+                    <strong>N.º <span t-field="o.name"/> </strong>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom:20px;">
+            <div class="col-xs-12 text-left" style="font:13px lucida-console,sans-serif !important;" >
+                <span style="color:#ffffff;">. </span> <span> Roberto A. Torres S.A</span>   RUC <span t-field="o.company_id.vat"/><br/>
+                <span style="color:#ffffff;">. </span> <span t-field="o.company_id.partner_id.street"/> <span t-field="o.company_id.partner_id.state_id.name"/> <span t-field="o.company_id.partner_id.country_id.name"/><br/>
+                 
+                <span style="color:#ffffff;">. </span> <span t-field="o.company_id.partner_id.phone" /><br/>
+            </div>
+        </div>
+    </div>
+    <t t-call="report.external_layout">
+        <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+        <div class="page">
+            <div class="oe_structure"/>
+            <div class="row mt32 mb32" style="padding-left:15px; margin-top:15px; font-size:14px;">
+                <div class="col-xs-12" style="margin-top:15px; margin-bottom:15px;">
+                    <div class="row" t-if="o.partner_id.parent_id.name">
+                        <div class="col-xs-9">
+                            <strong>
+                                <t t-if="o.partner_id.parent_id.name">
+                                    Company: 
+                                    <span t-field="o.partner_id.parent_id.name"/>
+                                </t>
+                            </strong>
+                        </div>
+                    </div>
+                    <div class="row" t-if="o.partner_id.name">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td class="col-xs-1" style="border-style:solid; border-width:thin; border-color:#ffffff;text-align: right">Contact: </td>
+                                <td class="col-xs-7" style="border-style:solid; border-width:thin; border-color:#ffffff;text-align: left" ><span t-field="o.partner_id.name"/></td>
+                                <td class="col-xs-2" style="border-style:solid; border-width:thin; border-color:#ffffff"></td>
+                                <td class="col-xs-1" style="border-style:solid; border-width:thin; border-color:#ffffff;text-align: right">Date: </td>
+                                <td class="col-xs-1" style="border-style:solid; border-width:thin; border-color:#ffffff;text-align: left"><span t-field="o.create_date" t-field-options='{"format": "dd/MM/yyyy"}'/></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1" style="border-style:solid; border-width:thin; border-color:#ffffff;text-align: center"></td>
+                                <td class="col-xs-7" style="border-style:solid; border-width:thin; border-color:#ffffff;text-align: center"></td>
+                                <td class="col-xs-2" style="border-style:solid; border-width:thin; border-color:#ffffff"></td>
+                                <td class="col-xs-1" style="border-style:solid; border-width:thin; border-color:#ffffff;text-align: right"></td><!--Moneda: -->
+                                <td class="col-xs-1" style="border-style:solid; border-width:thin; border-color:#ffffff;text-align: left"></td><!--<span t-field="o.currency_id"/> -->
+                            </tr>
+                        </table>
+                        
+                    </div>
+                </div>
+                <!--<div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:black; margin-top:15px; margin-bottom:15px;">-->
+                
+            </div>
+            <!--<div class="row mt32 mb32" style="padding-left:15px; margin-top:15px; font-size:14px;">
+                <div class="col-xs-12">Sirvase atender a los siguientes articulos: </div>			
+            </div>-->
+            <div class="row mt32 mb32" style="padding:0px; margin-top:10px; font-size:14px;">
+                <div class="col-xs-12" style="padding:0px;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <th class="col" style="background-color: #af3c36;color: #ffffff; text-align:center; padding:4px;">#</th>
+                            <th class="col-xs-2" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Code</th>
+                            <th class="col-xs-5" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Description</th>
+                            <th class="col-xs-1" style="background-color: #af3c36;color: #ffffff; text-align:center; padding:4px;">Qty.</th>
+                            <th class="col-xs-1" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px; ">Unit.</th>
+                            
+                            <th class="col-xs-1" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Price<span t-field="o.currency_id.symbol" /></th>
+                            <th class="col-xs-1" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Total <span t-field="o.currency_id.symbol" /></th>
+                            
+                        </tr>
+                            <tr t-foreach="o.order_line" t-as="productos">
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="productos_index+1"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="productos.codigo_producto2"/></td>
+                                <td style="border:1px solid; text-align:left; padding:8px; border-color: #d7d0d1;">
+                                    <span t-if="productos.description_purchase" t-field="productos.description_purchase"/>
+                                    <span t-else="" t-field="productos.name"/>
+                                </td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.product_qty)"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-field="productos.product_uom.name"/></td>
+                                
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.price_unit)"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.price_subtotal)"/></td>
+
+                            </tr>
+                        
+                        <tr t-if="o.tipo_compra_le=='Local'">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;">Subtotal</td>
+                            <!-- <td style="border:1px solid; text-align:center; padding:8px; border-width:thin;"><span t-esc="round(o.amount_total/1.18, 2)"/></td> -->
+                            <td style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;"><span t-esc="'{0:,.2f}'.format(o.amount_untaxed)"/></td>
+                            
+                        </tr>
+                        <tr t-if="o.tipo_compra_le=='Local'">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;">IGV (18%)</td>
+                            <td style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;"><span t-esc="'{0:,.2f}'.format(o.amount_tax)"/></td>
+                            
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="2" style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;"><strong>Total <span t-field="o.currency_id.symbol" /> <span t-field="o.incoterm_id.code"/></strong></td>
+                            <td style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;"><strong><span t-esc="'{0:,.2f}'.format(o.amount_total)"/></strong></td>
+                            
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row" style="margin-top:15px;">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12" style="border-style:solid; border-width:thin; border-color:#ffffff;">Note : <span t-field="o.note"/></div>
+                        <!--<div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:#ffffff;"><span t-field="o.note"/></div>-->
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="border-style:solid; border-width:thin; border-color:#ffffff;">Port : <span t-field="o.port"/> </div>
+                        <!--<div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:#ffffff;"><span t-field="o.port"/></div>-->
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="border-style:solid; border-width:thin; border-color:#ffffff;">Payment Terms : <span t-field="o.payment_terms"/></div>
+                        <!--<div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:#ffffff;"><span t-field="o.delivery_time"/></div>-->
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="border-style:solid; border-width:thin; border-color:#ffffff;">Delivery Time : <span t-field="o.delivery_time"/></div>
+                        <!--<div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:#ffffff;"><span t-field="o.payment_terms"/></div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span>Best Regards</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span t-field="o.create_uid.name"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12" style="text-align: right">
+                        TOTAL <span t-field="o.currency_id.symbol" /> <span t-esc="'{0:,.2f}'.format(o.amount_total)"/>
+                    </div>
+                </div>
+            </div>
+    </t>
+</template>
+<!--<template id="pdf_presupuesto_proov_template">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="personalizacion_compras.pdf_presupuesto_provee_report" t-lang="o.name"/>
+        </t>
+    </t>
+</template>-->
+<!-- <template id="pdf_presupuesto_proov_template" inherit_id="purchase.report_purchasequotation" >
+            <xpath expr="//t[@t-call='report.html_container']" position="replace">
+              <t t-foreach="docs" t-as="o">
+                <t t-call="personalizacion_compras.pdf_presupuesto_provee_report" t-lang="o.partner_id.lang"/>
+            </t>
+          </xpath>
+</template> -->
+</odoo>
+

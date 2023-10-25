@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_kit_line,sale.kit.line,model_sale_kit_line,,1,1,1,0
+access_sale_adicional_line,sale.adicional.line,model_sale_adicional_line,,1,1,1,0
+access_report_seguimiento_pedidos,report.seguimiento.pedidos,model_report_seguimiento_pedidos,,1,1,1,1
+seguimiento_pedidos1,seguimiento_pedidos1,model_report_seguimiento_pedidos,account.group_account_manager,1,1,1,1
+seguimiento_pedidos2,seguimiento_pedidos2,model_report_seguimiento_pedidos,stock.group_stock_user,1,1,1,1
+ir_sequence1,ir_sequence1,base.model_ir_sequence,stock.group_stock_user,1,1,1,1

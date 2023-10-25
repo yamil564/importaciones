@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="gestionit_report_purchase_order" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//div[hasclass('oe_structure')]" position="before">
+            <div name="sale_order_address" class="w-100 mb16">
+                <table class="w-100">
+                    <tr>
+                        <!-- CLIENTE -->
+                        <th class="l_partner" width="20%">
+                            <label style="font-size: 12px" t-esc="'PROVEEDOR : '"/>
+                        </th>
+                        <td class="v_partner" width="40%">
+                            <t t-if="o.partner_id.parent_id">
+                                <span style="font-size: 12px" t-esc="o.partner_id.parent_name.upper()"/>
+                            </t>
+                            <t t-else="">
+                                <span style="font-size: 12px" t-esc="o.partner_id.name.upper()"/>
+                            </t>
+                        </td>
+                        
+                         <!-- FECHA EMISIÓN -->
+                        <th>
+                            <label style="font-size: 12px" t-esc="'FECHA DE EMISIÓN : '"/>
+                        </th>
+                        <td class="v_partner" width="40%">
+                            <!--<span style="font-size: 12px" t-esc="doc.date_order" t-if="doc.date_order"/>-->
+                            <span style="font-size: 12px" t-esc="o.create_date.date().strftime('%d/%m/%Y')"/>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <!-- ATENCIÓN -->
+                        <th>
+                            <label style="font-size: 12px" t-esc="'ATENCIÓN : '"/>
+                        </th>
+                        <td>
+                            <!--<span t-esc="doc.user_id.name"/>-->
+                            <t t-if="o.partner_id.parent_id">
+                                <span style="font-size: 12px" t-field="o.partner_id.title"/> <span style="font-size: 12px" t-esc="o.partner_id.name.upper()"/>
+                            </t>
+                            <t t-else="">
+                                <span></span>
+                            </t>
+                            
+                        </td>
+
+                        <!-- REFERENCIA -->
+                        <th>
+                            <label style="font-size: 12px" t-esc="'REFERENCIA : '"/>
+                        </th>
+                        <td>
+                            <span style="font-size: 12px" t-esc="o.partner_ref" />
+                        </td>
+                       
+                    </tr>
+                    <tr>
+                         <!-- TAX ID -->
+                        <th>
+                            <label style="font-size: 12px" t-esc="'TAX ID : '"/>
+                        </th>
+                        <td>
+                            <span style="font-size: 12px" t-esc="o.partner_id.vat"/>
+                        </td>
+
+                        <!-- MONEDA -->
+                        <th>
+                            <label style="font-size: 12px" t-esc="'MONEDA : '"/>
+                        </th>
+                        <td>
+                            <span style="font-size: 12px" t-esc="o.currency_id.currency_unit_label.upper()" t-if="o.currency_id.currency_unit_label"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- TELÉFONO -->
+                        <th>
+                            <label style="font-size: 12px" t-esc="'TELEFONO : '" />
+                        </th>
+                        <td>
+                            <span style="font-size: 12px" t-field="o.partner_id.phone"/>
+                        </td>
+
+                        <!-- INCOTERM -->
+                        <th style="white-space: nowrap;">
+                            <label style="font-size: 12px" t-esc="'INCOTERM: '"/>
+                        </th>
+                        <td>
+                            <span style="font-size: 12px" t-esc="o.incoterm_id.code"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- EMAIL -->
+                        <th>
+                            <label style="font-size: 12px" t-esc="'EMAIL : '" />
+                        </th>
+                        <td>
+                            <span style="font-size: 12px" t-esc="o.partner_id.email.upper()" t-if="o.partner_id.email"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </xpath>
+        <xpath expr="//h2" position="replace">
+        </xpath>
+        <xpath expr="//h2" position="replace">
+        </xpath>
+        <xpath expr="//h2" position="replace">
+        </xpath>
+        <xpath expr="//h2" position="replace">
+        </xpath>
+        <xpath expr="//div[@id='informations']" position="attributes">
+            <attribute name="class">d-none</attribute>
+        </xpath>
+        <xpath expr="//t[@t-call='web.external_layout']" position="before">
+            <t t-set="documents" t-value="{'draft':'SOLICITUD DE PRESUPUESTO',
+                                            'sent':'SOLICITUD DE PRESUPUESTO',
+                                            'sale':'PURCHASE ORDER',
+                                            'to aprove':'PURCHASE ORDER',
+                                            'purchase':'PURCHASE ORDER',
+                                            'done':'PURCHASE ORDER',
+                                            'cancel':'SOLICITUD DE COMPRA CANCELADA'}"/>
+            <t t-set="document_display_name" t-value="documents.get(o.state,'-')"/>
+        </xpath>
+        <xpath expr="//table[hasclass('o_main_table')]/thead" position="attributes">
+            <attribute name="class">d-none</attribute>
+        </xpath>
+        <xpath expr="//table[hasclass('o_main_table')]/tbody" position="attributes">
+            <attribute name="class">d-none</attribute>
+        </xpath>
+        <xpath expr="//table[hasclass('o_main_table')]" position="after">
+            <table class="w-100 table-order-lines">
+                <thead>
+                    <tr>
+                        <th class="h_item">ITEM</th>
+                        <th class="h_codigo_r">ROATSA CODE</th>
+                        <th class="h_codigo_p">SUPLIER CODE</th>
+                        <th class="h_name">DESCRIPCION</th>
+                        <th class="h_product_uom_id">U.M.</th>
+                        <th class="h_quantity">CANT</th>
+                        <th class="h_price_unit">PRECIO UNIT</th>
+                        <!-- <th class="h_discount" t-if="display_discount">Dscto.(%)</th> -->
+                        <th class="h_price_total">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="item" t-value="1"/>
+                    <t t-set="order_line" t-value="o.order_line"/>
+                    <tr t-foreach="order_line.sorted('sequence')" t-as="l">
+                        <t t-if="not l.display_type">
+                            <td class="v_item">
+                                <span t-esc="item"/>
+                            </td>
+                            <td class="v_name">
+                                <span t-field="l.default_code"/>
+                            </td>
+                            <td class="v_name">
+                                <span t-field="l.codigo_producto"/>
+                            </td>
+                            <td class="v_name">
+                                <span t-field="l.product_id.name"/>
+                            </td>
+                            <td class="v_product_uom_id">
+                                <span t-esc="l.product_uom.name"/>
+                            </td>
+                            <td class="v_quantity">
+                                <span t-esc="l.product_uom_qty"/>
+                            </td>
+                            <td class="v_price_unit">
+                                <span t-esc="0 if l.product_uom_qty == 0 else  round((l.price_total/l.product_uom_qty),2)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                            <!-- <td class="v_discount" t-if="display_discount">
+                                <span t-if="l.discount &gt; 0">
+                                    <span t-esc="round(l.price_total/l.product_uom_qty,4)" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    <span t-esc="'('+str(l.discount)+'%)'"/>
+                                </span>
+                            </td> -->
+                            <td class="v_price_total">
+                                <span t-field="l.price_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                            <t t-set="item" t-value="item+1"/>
+                        </t>
+
+                        <t t-if="l.display_type == 'line_section'">
+                            <td colspan="99" id="section">
+                                <span t-field="l.name"/>
+                            </td>
+                            <t t-set="current_section" t-value="l"/>
+                            <t t-set="current_subtotal" t-value="0"/>
+                        </t>
+                        <t t-if="l.display_type == 'line_note'">
+                            <td colspan="99" id="note">
+                                <span t-field="l.name"/>
+                            </td>
+                        </t>
+                    </tr>
+                    <!-- <t t-if="len(order_line) &lt; 35">
+                        <tr t-foreach="range(35-len(order_line))" t-as="x" class="empty">
+                            <td class="empty"></td>
+                            <td class="empty"></td>
+                            <td class="empty"></td>
+                            <td class="empty"></td>
+                            <td class="empty"></td>
+                            <td class="empty"></td>
+                            <td class="empty"></td>
+                        </tr>
+                    </t> -->
+                </tbody>
+            </table>
+        </xpath>
+        <xpath expr="//div[@id='total']" position="attributes">
+            <attribute name="class">d-none</attribute>
+        </xpath>
+        <xpath expr="//div[@id='total']" position="after">
+            <div class="row purchase-content-total mt16" id="total">
+                <div class="col-8">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <p><span t-esc="'TERMS AND CONDITIONS'"/></p>
+                    <p><span>PAYMENT TERM: <t t-esc="o.payment_term_id.name.upper() if o.payment_term_id.name else ''"/></span></p>
+                    <p><span t-esc="'DELIVERY TIME: {}'.format(o.date_planned.strftime('%Y-%m-%d') if o.date_planned else '')"/></p>
+                    <p><span t-esc="'WAY OF SHIPMENT: {}'.format(o.way_of_shipment if o.way_of_shipment else '')"/></p>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <p><span t-esc="'AUTHORIZED BY: {}'.format(o.autorizado_por.name.upper())"/></p>
+                    <p><span t-esc="'USER: {}'.format(o.user_id.name.upper())"/></p>
+                    
+                </div>
+                <div class="col-4">
+                    <table class="w-100">
+                        <tr class="border-black o_total">
+                            <td>
+                                <strong>Total</strong>
+                            </td>
+                            <td class="text-right">
+                                <span class="text-nowrap" t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+        </xpath>
+         
+    </template>
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+trasport1,transport1,stock_transport_management.model_transport_transportista,sales_team.group_sale_manager,1,1,1,1
+trasport2,transport2,stock_transport_management.model_transport_transportista,stock.group_stock_user,1,1,1,1

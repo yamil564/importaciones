@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<report id="pdf_presupuesto_id"
+            model="purchase.order"
+            string="Orden de Compra - Cliente"
+            report_type="qweb-pdf"
+            name="personalizacion_compras.pdf_presupuesto_template"  
+            file="personalizacion_compras.pdf_presupuesto_template"
+            menu="True"
+            attachment_use="True"
+            attachment="('Orden'+object.name +'.pdf')"
+            >
+    </report>
+    <report id="pdf_presupuesto_proveedor"
+            model="purchase.order"
+            string="Orden de Compra - Cliente - Proveedor"
+            report_type="qweb-pdf"
+            name="personalizacion_compras.pdf_presupuesto_proov_template"  
+            file="personalizacion_compras.pdf_presupuesto_proov_template"
+            menu="True"
+            >
+    </report>
+</odoo>

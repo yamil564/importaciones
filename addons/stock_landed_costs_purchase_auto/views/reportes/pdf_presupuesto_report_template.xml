@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="stock_landed_costs_purchase_auto.pdf_landed_cost_report">    		
+    <t t-set="company" t-value="o.picking_ids[0].company_id" />
+    <div class="header">
+        <div class="row">
+            <div class="col-xs-6  text-left">
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 100px;" />
+            </div>
+            <div class="col-xs-6  text-right">
+                <div class="row" style="color: #af3c36; font-size:42px;">
+                    Embarque
+                </div>
+                <div class="row">
+                    <strong>N.º de embarque <span t-field="company.name"/> </strong>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom:20px;">
+            <div class="col-xs-12 text-left" style="font:13px lucida-console,sans-serif !important;" >
+                <span style="color:#ffffff;">. </span> <span> Roberto A. Torres S.A</span>   RUC <span t-field="company.vat"/><br/>
+                <span style="color:#ffffff;">. </span> <span t-field="company.partner_id.street"/><br/>
+                 
+                <span style="color:#ffffff;">. </span> <span t-field="company.partner_id.phone" /><br/>
+            </div>
+        </div>
+    </div>
+    <t t-call="web.external_layout">
+        <t t-set="o" t-value="o.with_context({'lang':company.partner_id.lang})"/>
+        <div class="page">
+            <div class="oe_structure"/>
+            <div class="row mt32 mb32" style="padding-left:15px; margin-top:15px; font-size:14px;">
+                <div class="col-xs-7" style="margin-top:15px; margin-bottom:15px;">
+                    <div class="row">
+                        <div class="col-xs-5"><strong>Proveedor (es)</strong></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-5">
+                                <t t-foreach="o.picking_ids" t-as="movimientos">
+                                    <t t-if="movimientos.partner_id.parent_id">
+                                        <span t-field="movimientos.name"/>: <span t-field="movimientos.partner_id.parent_name"/><br/>
+                                    </t>
+                                    <t t-else="">
+                                        <span t-field="movimientos.name"/>: <span t-field="movimientos.partner_id.name"/><br/>
+                                    </t>
+                                </t>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:black; margin-top:15px; margin-bottom:15px;">-->
+                <div class="col-xs-5" style="margin-top:15px; margin-bottom:15px;text-align: right">
+                    <!--<div class="row" style="border-bottom-style:solid; border-width:thin; border-color:black;">-->
+                    <div class="row">
+                        <div class="col-xs-7" style="border-style:solid; border-width:thin; border-color:#ffffff;">Fecha : </div>
+                        <div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:#ffffff;"><span t-field="o.date" t-field-options='{"format": "dd/MM/yyyy"}'/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-7" style="border-style:solid; border-width:thin; border-color:#ffffff;">Ordenes de compra :  </div>
+                        <div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:#ffffff;"><span t-field="o.names_purchase_ids"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-7" style="border-style:solid; border-width:thin; border-color:#ffffff;">Movimientos  :  </div>
+                        <div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:#ffffff;">
+                            <!--<span t-field="o.picking_ids"/>-->
+                                <t t-foreach="o.picking_ids" t-as="movimientos">
+                                    <span t-field="movimientos.name"/>,
+                                </t>
+                        </div>
+                    </div>
+                    <!--<div class="row">
+                        <div class="col-xs-7" style="border-style:solid; border-width:thin; border-color:#ffffff;">Asesor Comercial : </div>
+                        <div class="col-xs-5" style="border-style:solid; border-width:thin; border-color:#ffffff;"><span t-field="o.create_uid.name"/></div>
+                    </div>-->
+                </div>
+            </div>
+            <div class="row mt32 mb32" style="padding-left:15px; margin-top:15px; font-size:14px;">
+                <div class="col-xs-12"><strong>PRORRATEO: </strong></div>			
+            </div>
+            <div class="row mt32 mb32" style="padding:0px; margin-top:10px; font-size:14px;">
+                <div class="col-xs-12" style="padding:0px;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <th class="col" style="background-color: #af3c36;color: #ffffff; text-align:center; padding:4px;">#</th>
+                            <th class="col" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px; ">Orden</th>
+                            <th class="col-xs-4" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Producto</th>
+                            <th class="col" style="background-color: #af3c36;color: #ffffff; text-align:center; padding:4px;">Cant.</th>
+                            <th class="col-xs-1" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Precio FOB $</th>
+                            <th class="col-xs-1" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Subtotal FOB $</th>
+                            <th class="col-xs-1" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Precio Final $</th>
+                            <th class="col-xs-1" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Total $</th>
+                            
+                        </tr>
+                            <tr t-foreach="o.stock_valuario_orderlines" t-as="productos">
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="productos_index+1"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-field="productos.name_order"/></td>
+                                <td style="border:1px solid; text-align:left; padding:8px; border-color: #d7d0d1;">
+                                    <span t-field="productos.product_id.name"/>
+                                </td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.quantity)"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.former_cost_per_unit)"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.former_cost)"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.final_precio)"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.final_cost)"/></td>
+
+                            </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;"><strong>SubTotal </strong></td>
+                            <td style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;"><strong><span t-esc="'{0:,.2f}'.format(o.amount_subtotal_prorrateo)"/></strong></td>
+                            
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;"><strong>Total </strong></td>
+                            <td style="border:1px solid; text-align:center; padding:8px; border-color: #ffffff;"><strong><span t-esc="'{0:,.2f}'.format(o.amount_total_prorrateo)"/></strong></td>
+                            
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!--
+            <div class="row mt32 mb32" style="padding-left:15px; margin-top:15px; font-size:14px;">
+                <div class="col-xs-12">Ajustes de valorización: </div>			
+            </div>
+            <div class="row mt32 mb32" style="padding:0px; margin-top:10px; font-size:14px;">
+                <div class="col-xs-12" style="padding:0px;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <th class="col" style="background-color: #af3c36;color: #ffffff; text-align:center; padding:4px;">#</th>
+                            <th class="col-xs-6" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Artículo y Descripción</th>
+                            <th class="col" style="background-color: #af3c36;color: #ffffff; text-align:center; padding:4px;">Cant.</th>
+                            <th class="col" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px; ">Unidad</th>
+                            
+                            <th class="col-xs-1" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Precio $</th>
+                            <th class="col-xs-1" style="background-color: #af3c36; color: #ffffff; text-align:center; padding:4px;">Costo final $</th>
+                            
+                        </tr>
+                            <tr t-foreach="o.valuation_adjustment_lines" t-as="productos">
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="productos_index+1"/></td>
+                                <td style="border:1px solid; text-align:left; padding:8px; border-color: #d7d0d1;">
+                                    <span t-field="productos.product_id.name"/>
+                                </td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.quantity)"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-field="productos.product_id.name"/></td>
+                                
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.former_cost_per_unit)"/></td>
+                                <td style="border:1px solid; text-align:center; padding:8px; border-color: #d7d0d1;"><span t-esc="'{0:,.2f}'.format(productos.final_cost)"/></td>
+
+                            </tr>
+                    </table>
+                </div>
+            </div>-->
+        </div>
+        <div class="footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span>Atentamente:</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <span t-field="o.create_uid.name"/>
+                    </div>
+                </div>
+                <!--<div class="row">
+                    <div class="col-xs-12" style="text-align: right">
+                        TOTAL <span t-field="o.currency_id.symbol" /> <span t-esc="'{0:,.2f}'.format(o.amount_total)"/>
+                    </div>
+                </div>-->
+            </div>
+    </t>
+</template>
+<template id="pdf_landed_cost_template">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="stock_landed_costs_purchase_auto.pdf_landed_cost_report" t-lang="o.name"/>
+        </t>
+    </t>
+</template>  
+</data>
+</openerp>
+

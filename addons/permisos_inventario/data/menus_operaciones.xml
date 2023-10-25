@@ -1,0 +1,363 @@
+<odoo>
+    <data>
+
+        <!--OPERACIONES Recepciones-->
+        <record id="stock_action_picking_recepciones" model="ir.actions.act_window" >
+            <field name="name">Recepciones</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <!-- <field name="auto_refresh">10</field> -->
+            <field name="domain">
+                [('picking_type_id.name','in',['Recepciones'])]
+            </field>
+            <field name="context">
+                {'contact_display': 'partner_address',}
+            </field>
+
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        </record>
+
+        <menuitem name="Recepciones"
+                  id="stock.all_recepciones"
+                  action="stock_action_picking_recepciones"
+                  parent="stock.menu_stock_warehouse_mgmt"/>
+        
+        <!--OPERACIONES PICK-->
+        <record id="stock_action_picking_pick" model="ir.actions.act_window" >
+            <field name="name">Operaciones de Almacen</field>
+            <field name="res_model">stock.picking</field>
+            <!--<field name="view_id" ref="stock.vpicktree"/>-->
+            <field name="view_mode">tree,form,calendar</field>
+            <!-- <field name="auto_refresh">10</field> -->
+            <field name="domain">
+                [('picking_type_id.name','in',['Pick'])]
+            </field>
+            <field name="context">
+                {'contact_display': 'partner_address',}
+            </field>
+
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        </record>
+
+
+        <menuitem name="Operaciones de Almacen"
+                  id="stock.all_picking_pick"
+                  action="stock_action_picking_pick"
+                  parent="stock.menu_stock_warehouse_mgmt"/>
+        
+        <!--OPERACIONES PACK -->
+        <record id="stock_action_picking_pack" model="ir.actions.act_window" >
+            <field name="name">Operaciones de Despacho</field>
+            <field name="res_model">stock.picking</field>
+            <!--<field name="view_id" ref="stock.vpicktree"/>-->
+            <field name="view_mode">tree,form,calendar</field>
+
+            <field name="domain">
+                [('picking_type_id.name','in',['Pack'])]
+            </field>
+            <field name="context">
+                {'contact_display': 'partner_address',}
+            </field>
+
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        </record>
+
+
+        <menuitem name="Operaciones de Despacho"
+                  id="stock.all_picking_pack"
+                  action="stock_action_picking_pack"
+                  parent="stock.menu_stock_warehouse_mgmt"/>
+        
+        <!--OPERACIONES OUT -->
+
+        <record id="stock.action_picking_tree_all" model="ir.actions.act_window" >
+            <field name="name">Operaciones de Envio</field>
+            <field name="res_model">stock.picking</field>
+            <!--<field name="view_id" ref="stock.vpicktree"/>-->
+            <field name="view_mode">tree,form,calendar</field>
+
+            <field name="domain">
+                [('picking_type_id.name','in',['Órdenes de entrega'])]
+            </field>
+            <field name="context">
+                {'contact_display': 'partner_address',}
+            </field>
+
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        </record>
+
+        <menuitem name="Operaciones de Envio test"
+                  id="stock.all_picking_en"
+                  action="stock.action_picking_tree_all"
+                  parent="stock.menu_stock_warehouse_mgmt"/>
+
+        
+        <!--OPERACIONES PICK-->
+        <record id="stock_action_picking_ti" model="ir.actions.act_window" >
+            <field name="name">Transferencias internas</field>
+            <field name="res_model">stock.picking</field>
+            <!--<field name="view_id" ref="stock.vpicktree"/>-->
+            <field name="view_mode">tree,form,calendar</field>
+            <!-- <field name="auto_refresh">10</field> -->
+            <field name="domain">
+                [('picking_type_id.name','in',['Transferencias internas'])]
+            </field>
+            <field name="context">
+                {'contact_display': 'partner_address',}
+            </field>
+
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        </record>
+
+
+        <menuitem name="Transferencias internas"
+                  id="stock.all_picking_ti"
+                  action="stock_action_picking_ti"
+                  parent="stock.menu_stock_warehouse_mgmt"/>
+
+        <record id="stock_picking_form3" model="ir.ui.view">
+            <field name="name">stock_picking_form3</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr='//form[1]' position='attributes'>
+                    <attribute name="create">false</attribute>
+                    <!--<attribute name="edit">false</attribute>-->
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="replace">
+                    <field name="partner_id" string="Cliente" />
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="descripcion_two" />
+                </xpath>
+                <xpath expr="//field[@name='move_type']" position="replace">
+                    <field name="move_type" string="Metodo de entrega" />
+                </xpath>
+                <!--<xpath expr="//button[@name='139']" position="replace">
+                </xpath>
+                <xpath expr="//button[@name='button_scrap']" position="replace">
+                </xpath>
+                <xpath expr="//button[@name='force_assign']" position="replace">
+                </xpath>
+                <xpath expr="//button[@name='action_cancel']" position="replace">
+                </xpath>
+                <xpath expr="//button[@name='do_unreserve']" position="replace">
+                </xpath>
+                <xpath expr="//button[@name='action_assign']" position="replace">
+                </xpath>-->
+                <!-- quant_reserved_exist comentado lineas: 147, 148 y 150 -->
+                <!-- <xpath expr="//page[@name='extra']//field[@name='quant_reserved_exist']" position="after"> -->
+                        <!-- <field name="descripcion_one" attrs="{'invisible': [('picking_type_code', '=', 'internal')]}"/> -->
+                        <!--<field name="descripcion_two" attrs="{'invisible': [('picking_type_code', '=', 'internal')]}"/>-->
+                <!-- </xpath> -->
+                <!--<xpath expr="//page[@name='extra']//field[@name='picking_type_id']" position="replace">
+                        <field name="picking_type_id" attrs="{'readonly': [('state', 'in', ('assigned', 'cancel'))]}"/>
+                        <field name="tipo_vent" />
+                </xpath>-->
+            </field>
+        </record>
+
+        <record id="stock_picking_tree3" model="ir.ui.view">
+            <field name="name">stock_picking_tree3</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <xpath expr='//tree[1]' position='attributes'>
+                    <!--<attribute name="create">false</attribute>-->
+                    <attribute name="string">Confirmacion de Entrega</attribute>
+                    <attribute name="decoration-success">state == 'done'</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="replace">
+                    <field name="partner_id" string="Cliente" /><!--style="width:2%;"-->
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="create_uid" string="Vendedor"/>
+                    <field name="mercaderia" string="Mercadería"/>
+                    <field name="date_done" string="Fecha validación"/>
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="replace">
+                    <field name="group_id" string="Grupo"/>
+                </xpath>
+                <xpath expr="//field[@name='location_dest_id']" position="replace">
+                </xpath>
+                <!--<xpath expr="//field[@name='location_dest_id']" position="before">
+                    <field name="location_id"/>
+                </xpath>-->
+                <xpath expr="//field[@name='backorder_id']" position="replace">
+                </xpath>
+            </field>
+        </record>
+
+        <record id="sale_order_form4" model="ir.ui.view">
+            <field name="name">sale_order_form4</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="tipo_vent" string="Motivo" /><!--invisible="1"-->
+                    <field name="nro_user" string="Nro Usuario" invisible="1"/>
+                    <!--<field name="warehouse_id" />-->
+                </xpath>
+                <xpath expr="//page[2]" position='attributes'>
+                    <attribute name="attrs">{'invisible': [('warehouse_id', '!=', 1)]}</attribute>
+                </xpath>
+                <xpath expr="//page[3]" position='attributes'>
+                    <attribute name="attrs">{'invisible': [('warehouse_id', '!=', 1)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="replace">
+                    <field name="vat_partner4" invisible="1"/>
+                    <field name="sim_igual" invisible="1"/>
+                    <field name="partner_id" domain="[('customer_rank','=',1),'|',('parent_id.id', sim_igual, vat_partner4 ),('id', sim_igual, vat_partner4 )]" attrs="{'readonly': [('state', 'not in', ['draft','done','sale','sent','cancel'])]}"/>
+                    <!--<field name="partner_id" attrs="{'readonly':[['state','not in',['draft','done','sale','sent','cancel']]],'required':True}"/>-->
+                    <field name="vat_partner2" string="Direccion"/>
+                    <field name="mercaderia" string="Mercadería" attrs="{'invisible': [('state', 'in', ('draft', 'sent', 'cancel'))]}"/>
+                    <field name="nro_guia" attrs="{'invisible': [('state', 'in', ('draft', 'sent', 'cancel'))]}"/>
+                    <field name="estado_ganado" />
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="replace">
+                    <field name="dom_segundo_almacen" invisible="1"/><!--'|',('segundo_almacen','=', 'Segundo'),-->
+                    <!-- <field name="product_id" domain="[('segundo_almacen','in', ('Segundo',dom_segundo_almacen))]"
+                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':uom.uom, 'company_id': parent.company_id}"
+                        attrs="{'readonly': ['|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', [])]}"
+                    /> -->
+                    <field name="product_id" domain="[('segundo_almacen','in', ('Segundo',dom_segundo_almacen))]"
+                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'company_id': parent.company_id}"
+                        
+                    />
+                    <!-- parent.partner_id, 'quantity':product_uom_qty -->
+                </xpath>
+            </field>
+        </record>
+        <record id="sale_order_tree4" model="ir.ui.view">
+            <field name="name">sale_order_tree4</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="warehouse_id" />
+                </xpath>
+            </field>
+        </record>
+        <record id="sale_order_tree5" model="ir.ui.view">
+            <field name="name">sale_order_tree5</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="warehouse_id" />
+                </xpath>
+            </field>
+        </record>
+        <record id="product_product_form5" model="ir.ui.view">
+            <field name="name">product_product_form5</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position='before'>
+                    <field name="segundo_almacen" />
+                </xpath>
+            </field>
+        </record>
+        <record id="product_template_form5" model="ir.ui.view">
+            <field name="name">product_template_form5</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position='before'>
+                    <field name="segundo_almacen" />
+                </xpath>
+                <xpath expr="//field[@name='description']" position='before'>
+                    <group>
+                        <field name="description_sale" id="description_sale"/>
+                    </group>
+                </xpath>
+                <xpath expr="//page[@name='invoicing']" position="replace">
+                    <page string="Facturación" name="invoicing">
+                        <group name="properties">
+                            <group>
+                                <field name="property_account_income_id" domain="[('internal_type','=','other'),('deprecated','=',False)]"/>
+                                <field name="taxes_id" widget="many2many_tags"/>
+                                <field name="landed_cost_ok" string="Costes en destino"/>
+                            </group>
+                            <group>
+                                <field name="property_account_expense_id" domain="[('internal_type','=','other'),('deprecated','=',False)]"/>
+                                <field name="supplier_taxes_id" widget="many2many_tags"/>
+                                <field name="property_account_creditor_price_difference" string="Cuenta de Diferencia de Precio"/>
+                            </group>
+                            <group>
+                                <h1>Política de Facturación</h1>
+                                <field name="invoice_policy"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//page[@name='sales']" position="replace">
+                    <page string="Ventas" name="sales">
+                        <group name="properties">
+                            <group>
+                                <h1>Condiciones de venta</h1>
+                                <field name="sale_delay" string="Plazo de entrega del cliente"/>
+                                <field name="produce_delay" string="Plazo de entrega de fabricación"/>
+                             </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        <!--Productos en ventas-->
+        <record id="product.product_template_action" model="ir.actions.act_window" >
+            <field name="name">Productos</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <!-- <field name="auto_refresh">10</field> -->
+            <!--<field name="domain">
+                [('segundo_almacen','=','Segundo'),(env.user.id,'=','19')]
+            </field>-->
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <!--<field name="context">
+                {"search_default_filter_to_almacen":1}
+            </field>-->
+            <field name="search_view_id" ref="product.product_template_search_view"/>
+        </record>
+        <!--Productos en ventas segundo almacen-->
+        <record id="product_template_action_segu" model="ir.actions.act_window" >
+            <field name="name">Productos</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <!-- <field name="auto_refresh">10</field> -->
+            <field name="domain">
+                [('segundo_almacen','=','Segundo')]
+            </field>
+            <field name="search_view_id" ref="product.product_template_search_view"/>
+        </record>
+        <menuitem name="Productos"
+                  id="menu_product_template_action_segu"
+                  action="product_template_action_segu"
+                  parent="sale.sale_order_menu"
+                  sequence="50"/>
+        <record model="ir.ui.view" id="product.product_template_search_view">
+            <field name="name">product.template.search</field>
+            <field name="model">product.template</field>
+            <field name="priority">50</field>
+            <field name="arch" type="xml">
+                <search string="Product">
+                    <field name="name" string="Product" filter_domain="['|','|',('default_code','ilike',self),('name','ilike',self),('barcode','ilike',self)]"/>
+                    <field name="categ_id" filter_domain="[('categ_id', 'child_of', raw_value)]"/>
+                    <separator/>
+                    <filter string="Services" name="services" domain="[('type','=','service')]"/>
+                    <filter string="Products" name="consumable" domain="[('type', 'in', ['consu', 'product'])]" help="Products your store in the inventory"/>
+                    <separator/>
+                    <filter string="Segundo Almacen" name="filter_to_almacen" domain="[('segundo_almacen','=','Segundo')]"/>
+                    <filter string="Can be Sold" name="filter_to_sell" domain="[('sale_ok','=',1)]"/>
+                    <filter string="Can be Purchased" name="filter_to_purchase" domain="[('purchase_ok', '=', 1)]"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <field string="Attributes" name="attribute_line_ids" groups="product.group_product_variant"/>
+                    <field name="pricelist_id" widget="selection" context="{'pricelist': self}" filter_domain="[]" groups="product.group_sale_pricelist"/> <!-- Keep widget=selection on this field to pass numeric `self` value, which is not the case for regular m2o widgets! -->
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>
+

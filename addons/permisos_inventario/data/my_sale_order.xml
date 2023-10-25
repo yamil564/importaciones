@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+        <record id="sale_order_form5" model="ir.ui.view">
+            <field name="name">sale_order_form5</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div//h1" position="before">
+                   
+                    <widget name="web_ribbon" title="Perdido" bg_color="bg-danger" attrs="{'invisible': [('estado_ganado', 'in', ('Ganado','Negociando'))]}" />
+                    
+                    <widget name="web_ribbon" title="Ganado" attrs="{'invisible': [('estado_ganado','in', ('Perdido','Negociando'))]}" />
+                </xpath> 
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sale_order_tree5">
+            <field name="name">sale_order_tree5</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <data>	
+                    <field name="amount_total" position="after">	
+                        <field name="amount_total_dolar"  />
+                        <field name="amount_total_dolar2" invisible="1"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</odoo>
